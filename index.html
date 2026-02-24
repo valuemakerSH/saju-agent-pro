@@ -1052,12 +1052,10 @@ async function streamAI(data, gender, sal, daeun, seun) {
     {category:'HARM_CATEGORY_SEXUALLY_EXPLICIT',threshold:'BLOCK_NONE'},
     {category:'HARM_CATEGORY_DANGEROUS_CONTENT',threshold:'BLOCK_NONE'},
   ];
-  // 할당량 확인된 모델 순서 (2.5 Flash Lite → 2.5 Flash → 3 Flash)
+  // 할당량 확인된 안정 모델 순서
   const AI_MODELS = [
-    'gemini-2.5-flash-lite-preview-06-17',
+    'gemini-2.5-flash-lite',
     'gemini-2.5-flash',
-    'gemini-2.5-flash-preview-05-20',
-    'gemini-3-flash',
   ];
 
   const _aiCall = async (model, bodyObj) => {
@@ -1184,10 +1182,8 @@ ${q}
 
   // 검증된 모델 우선순위 + 안전 필터 OFF
   const QA_MODELS = [
-    'gemini-2.5-flash-lite-preview-06-17',
+    'gemini-2.5-flash-lite',
     'gemini-2.5-flash',
-    'gemini-2.5-flash-preview-05-20',
-    'gemini-3-flash',
   ];
   const QA_SAFETY_OFF = [
     {category:'HARM_CATEGORY_HARASSMENT',       threshold:'BLOCK_NONE'},

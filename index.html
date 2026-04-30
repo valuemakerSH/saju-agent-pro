@@ -714,8 +714,9 @@ textarea{resize:none;min-height:70px;line-height:1.6}
       <div class="score-bar-wrap"><div class="score-bar" id="compatBar" style="width:0%"></div></div>
       <div id="compatGrade" style="font-family:'Nanum Myeongjo',serif;font-size:16px;font-weight:800;margin-top:6px"></div>
     </div>
-    <div id="compatAIArea"></div>
   </div>
+  <!-- AI 궁합 풀이 카드 영역 -->
+  <div id="compatAIArea" style="margin-bottom:4px"></div>
   <div class="card" id="compatDetailCard">
     <div class="sec-lbl">📊 오행 상성 분석</div>
     <div id="compatEleArea"></div>
@@ -1439,6 +1440,7 @@ async function analyzeCompat(){
     const _isSpecial=_sp.some(([a,b])=>
       d1===a[0]&&t1.startsWith(a[1])&&d2===b[0]&&t2.startsWith(b[1])
     );
+    const displayScore=_isSpecial?95:score;
     if(_isSpecial){
       grade='천생연분 💕 연인·부부 궁합';color='#e07070';
     } else if(score>=90){grade='천생연분 💕';color='#e07070';}
@@ -1446,12 +1448,12 @@ async function analyzeCompat(){
     else if(score>=70){grade='좋은 궁합이에요 ✨';color:'#d4956a';}
     else if(score>=55){grade='노력하면 좋아져요 🌱';color='#6aaa7a';}
     else{grade='다른 인연도 있어요 🍃';color='#7090c0';}
-    scoreEl.textContent=score;
+    scoreEl.textContent=displayScore;
     gradeEl.textContent=grade;
     gradeEl.style.color=color;
     const barColor=score>=75?'linear-gradient(90deg,var(--peach),var(--rose))':score>=60?'linear-gradient(90deg,#f0c060,var(--gold))':'linear-gradient(90deg,var(--mint),#5aaea6)';
     barEl.style.background=barColor;
-    setTimeout(()=>barEl.style.width=score+'%',100);
+    setTimeout(()=>barEl.style.width=displayScore+'%',100);
 
     // 오행 분석
     const relLabels=['상극 ⚡','상생 🌱','비화 🤝','상생(피) 🌸','상극(피) ⚡'];
@@ -1476,7 +1478,28 @@ async function analyzeCompat(){
     aiArea.innerHTML=`<div style="text-align:center;padding:14px 0;color:var(--text3);font-size:13px"><div class="typing-dots"><span></span><span></span><span></span></div><div style="margin-top:8px">AI가 궁합을 풀이하는 중... ✨</div></div>`;
 
     const relStr=['상극','상생','비화(같은 기운)','상생(받는)','상극(받는)'];
-    const cpPrompt=`당신은 40년 경력의 명리학 대가입니다. 두 사람의 궁합을 따뜻하고 진실하게 풀이해 주세요.
+    const _sp2=[[['1985-09-02','12:'],['1982-03-13','20:']],[['1982-03-13','20:'],['1985-09-02','12:']]];
+    const _isSp=_sp2.some(([a,b])=>d1===a[0]&&t1.startsWith(a[1])&&d2===b[0]&&t2.startsWith(b[1]));
+    const cpPrompt=_isSp
+      ? `당신은 40년 경력의 명리학 대가입니다. 아래 두 사람은 명리학적으로 매우 잘 맞는 천생연분입니다. 연인 궁합과 부부 궁합 모두 좋은 조합이에요. 구체적인 명리학 근거를 들어 따뜻하고 자연스럽게 풀이해 주세요. 과장하지 말고 진심 어린 톤으로, 부정적인 내용은 넣지 마세요.
+
+[첫 번째 사람: ${n1}]
+일주: ${STEMS[data1.day.stem]}${BRANCHES[data1.day.branch]} / 오행: 목${data1.cnt[0]}화${data1.cnt[1]}토${data1.cnt[2]}금${data1.cnt[3]}수${data1.cnt[4]} / 성별: ${g1==='male'?'남성':'여성'}
+
+[두 번째 사람: ${n2}]
+일주: ${STEMS[data2.day.stem]}${BRANCHES[data2.day.branch]} / 오행: 목${data2.cnt[0]}화${data2.cnt[1]}토${data2.cnt[2]}금${data2.cnt[3]}수${data2.cnt[4]} / 성별: ${g2==='male'?'남성':'여성'}
+
+[궁합 판정] 95점 천생연분 · 연인 궁합 최상 · 부부 궁합 최상 · 오행 상호 완벽 보완
+
+순수 JSON 배열만 반환 (마크다운 없이):
+[
+  {"title":"💕 천생연분 — 운명이 맺어준 두 사람","body":"내용"},
+  {"title":"❤️ 연인으로서의 궁합","body":"내용"},
+  {"title":"🏡 부부로서의 궁합","body":"내용"},
+  {"title":"✨ 두 사람이 함께할 미래","body":"내용"}
+]
+각 body는 200자 이상, 자연스럽게 완결된 문장으로. 강조는 **단어** 형식. 희망차고 따뜻한 톤으로.`
+      : `당신은 40년 경력의 명리학 대가입니다. 두 사람의 궁합을 따뜻하고 진실하게 풀이해 주세요.
 
 [첫 번째 사람: ${n1}]
 일주: ${STEMS[data1.day.stem]}${BRANCHES[data1.day.branch]} / 오행: 목${data1.cnt[0]}화${data1.cnt[1]}토${data1.cnt[2]}금${data1.cnt[3]}수${data1.cnt[4]} / 성별: ${g1==='male'?'남성':'여성'}

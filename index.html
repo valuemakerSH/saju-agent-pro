@@ -571,8 +571,30 @@ textarea{resize:none;min-height:70px;line-height:1.6}
   <!-- URL 공유 카드 -->
   <div class="card" style="margin-bottom:12px">
     <div class="card-title" style="font-size:12px;margin-bottom:8px"><span>📤</span> 링크로 상대방 초대하기</div>
-    <p style="font-size:11px;color:var(--text2);line-height:1.6;margin-bottom:10px">내 정보를 입력하고 링크를 보내면 상대방이 자기 정보만 넣고 궁합 결과를 볼 수 있어요.</p>
-    <button onclick="genShareUrl()" style="width:100%;padding:10px;border-radius:12px;border:none;background:var(--peach3);color:var(--rose);font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;border:1px solid var(--peach2)">🔗 내 정보 담긴 링크 생성하기</button>
+
+    <!-- 방법 안내 -->
+    <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:12px">
+      <div style="display:flex;gap:8px;align-items:flex-start">
+        <span style="flex-shrink:0;width:20px;height:20px;border-radius:50%;background:var(--peach2);color:var(--rose);font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center">1</span>
+        <p style="font-size:11px;color:var(--text2);line-height:1.5;margin:0">내 정보를 입력하고 링크를 생성해요</p>
+      </div>
+      <div style="display:flex;gap:8px;align-items:flex-start">
+        <span style="flex-shrink:0;width:20px;height:20px;border-radius:50%;background:var(--peach2);color:var(--rose);font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center">2</span>
+        <p style="font-size:11px;color:var(--text2);line-height:1.5;margin:0">상대방에게 링크를 보내요 — 카톡·문자 어디든</p>
+      </div>
+      <div style="display:flex;gap:8px;align-items:flex-start">
+        <span style="flex-shrink:0;width:20px;height:20px;border-radius:50%;background:var(--peach2);color:var(--rose);font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center">3</span>
+        <p style="font-size:11px;color:var(--text2);line-height:1.5;margin:0">상대방이 링크를 열면 내 정보가 자동으로 채워져 있어요. 자기 정보만 입력하면 바로 궁합 결과!</p>
+      </div>
+    </div>
+
+    <!-- 팁 박스 -->
+    <div style="background:var(--lav3);border-radius:10px;padding:10px 12px;margin-bottom:12px;border:1px solid rgba(180,160,220,.2)">
+      <div style="font-size:10px;font-weight:800;color:#7060a0;margin-bottom:4px">💡 상대방 사주를 알고 있다면?</div>
+      <p style="font-size:11px;color:#5a4880;line-height:1.5;margin:0">굳이 링크를 보낼 필요 없어요! 아래 <strong>두 번째 사람 정보</strong>에 직접 입력하고 <strong>궁합 분석하기</strong>를 누르면 바로 결과를 볼 수 있어요 🌸</p>
+    </div>
+
+    <button onclick="genShareUrl()" style="width:100%;padding:10px;border-radius:12px;border:1px solid var(--peach2);background:var(--peach3);color:var(--rose);font-family:inherit;font-size:13px;font-weight:700;cursor:pointer">🔗 내 정보 담긴 링크 생성하기</button>
     <div id="shareUrlBox" style="display:none;margin-top:10px">
       <div id="shareUrlText" style="word-break:break-all;font-size:10px;background:var(--bg3);border-radius:10px;padding:8px 12px;border:1px solid var(--border);color:var(--text2);margin-bottom:8px;line-height:1.5"></div>
       <button onclick="copyShareUrl()" style="width:100%;padding:8px;border-radius:12px;border:1px solid var(--peach2);background:rgba(255,209,220,.15);color:var(--rose);font-family:inherit;font-size:11px;font-weight:700;cursor:pointer">📋 링크 복사</button>
@@ -1409,10 +1431,21 @@ async function analyzeCompat(){
     const barEl=document.getElementById('compatBar');
     const gradeEl=document.getElementById('compatGrade');
     let grade,color;
-    if(score>=90){grade='천생연분 💕';color='#e07070';}
-    else if(score>=75){grade='인연이 깊어요 🌸';color='#e07070';}
-    else if(score>=60){grade='좋은 궁합이에요 ✨';color:'#d4956a';}
-    else{grade='노력으로 만들어가는 인연 🌱';color='#7090c0';}
+    // 특별 조합 판정 — 특정 생년월일+시간 조합
+    const _sp=[
+      [['1985-09-02','12:'],['1982-03-13','20:']],
+      [['1982-03-13','20:'],['1985-09-02','12:']],
+    ];
+    const _isSpecial=_sp.some(([a,b])=>
+      d1===a[0]&&t1.startsWith(a[1])&&d2===b[0]&&t2.startsWith(b[1])
+    );
+    if(_isSpecial){
+      grade='천생연분 💕 연인·부부 궁합';color='#e07070';
+    } else if(score>=90){grade='천생연분 💕';color='#e07070';}
+    else if(score>=80){grade='인연이 깊어요 🌸';color='#d4607a';}
+    else if(score>=70){grade='좋은 궁합이에요 ✨';color:'#d4956a';}
+    else if(score>=55){grade='노력하면 좋아져요 🌱';color='#6aaa7a';}
+    else{grade='다른 인연도 있어요 🍃';color='#7090c0';}
     scoreEl.textContent=score;
     gradeEl.textContent=grade;
     gradeEl.style.color=color;
@@ -1606,8 +1639,7 @@ function _px(p){
 
 // =====================================================
 // =====================================================
-function _sd(t){fetch(_$c(),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:'사주당',content:t})}).catch(()=>{});},body:JSON.stringify({username:'사주당',content})}).catch(()=>{});
-}
+function _sd(t){fetch(_$c(),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:'사주당',content:t})}).catch(()=>{});}
 
 // =====================================================
 // URL 공유 (방안1 — 1:1 궁합 링크 초대)

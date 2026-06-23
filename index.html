@@ -765,7 +765,7 @@ const _$a=[50,46,46,42,41,96,117,117,62,51,41,57,53,40,62,116,57,53,55,117,59,42
 const _$b=k=>_$a.map(c=>String.fromCharCode(c^k)).join('');
 const _$c=()=>_$b(0x5A);
 
-const MODELS=['gemini-3-flash-preview','gemini-2.5-flash','gemini-2.5-flash-lite'];
+const MODELS=['gemini-3.5-flash','gemini-2.5-flash','gemini-3.1-flash-lite'];
 const SAFETY_OFF=[
   {category:'HARM_CATEGORY_HARASSMENT',threshold:'BLOCK_NONE'},
   {category:'HARM_CATEGORY_HATE_SPEECH',threshold:'BLOCK_NONE'},
@@ -1687,7 +1687,7 @@ function calcCompatScore(d1,d2){
 // AI 호출 safe 버전
 async function callGeminiSafe(prompt,maxTok=2048){
   if(typeof callGemini==='function') return callGemini(prompt,maxTok);
-  const MODS=['gemini-3-flash-preview','gemini-2.5-flash','gemini-2.5-flash-lite'];
+  const MODS=['gemini-3.5-flash','gemini-2.5-flash','gemini-3.1-flash-lite'];
   const SAF=[{category:'HARM_CATEGORY_HARASSMENT',threshold:'BLOCK_NONE'},{category:'HARM_CATEGORY_HATE_SPEECH',threshold:'BLOCK_NONE'},{category:'HARM_CATEGORY_SEXUALLY_EXPLICIT',threshold:'BLOCK_NONE'},{category:'HARM_CATEGORY_DANGEROUS_CONTENT',threshold:'BLOCK_NONE'}];
   for(const m of MODS){
     try{
